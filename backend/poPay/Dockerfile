@@ -1,7 +1,7 @@
 FROM gradle:7.5-alpine AS build
 WORKDIR /home/gradle/src
 COPY . /home/gradle/src
-RUN cd /home/gradle/src && gradle build
+RUN cd /home/gradle/src && gradle build && gradle bootJar
 
 FROM openjdk:19-jdk-alpine
 WORKDIR /app
