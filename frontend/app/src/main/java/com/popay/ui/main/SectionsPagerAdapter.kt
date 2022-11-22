@@ -28,8 +28,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
         return context.resources.getString(TAB_TITLES[position])
     }
 
+    //Number of pages in nav
     override fun getCount(): Int {
-        // Show 2 total pages.
         return 2
     }
 }
