@@ -4,6 +4,7 @@ import com.tdev.popay.model.User
 import com.tdev.popay.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.validation.Valid
@@ -11,6 +12,13 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api")
 class UserController(private val userRepository: UserRepository) {
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationExceptions(ex: MethodArgumentNotValidException): ResponseEntity<Map<String, String>> {
+        val errors: MutableMap<String, String> = HashMap()
+        ex.bindingResult.fieldErrors.forEach { error -> errors[error.field] = error.defaultMessage!! }
+        return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
+    }
+
     @GetMapping("/users")
     fun getAllUsers(): List<User> =
             userRepository.findAll()
