@@ -6,8 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class PopayApplicationTests {
 
-	/*@Test
-	fun contextLoads() {
-	}
-*/
+//  Commented for avoid error in build
+//	@Test
+//	fun contextLoads() {
+//	}
+
 }
