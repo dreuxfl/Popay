@@ -9,7 +9,7 @@ import javax.validation.constraints.*
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id_user: Long = 0,
+    var id: Long = 0,
     @get: NotBlank(message = "First name is mandatory")
     val first_name: String = "",
     @get: NotBlank(message = "Last name is mandatory")
@@ -31,13 +31,13 @@ data class User(
         }
         other as User
 
-        return id_user == other.id_user
+        return id == other.id
     }
 
     override fun hashCode(): Int = javaClass.hashCode()
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_user = $id_user , first_name = $first_name , last_name = $last_name , email = $email , password = $password , wallet = $wallet)"
+        return this::class.simpleName + "(id_user = $id , first_name = $first_name , last_name = $last_name , email = $email , password = $password , wallet = $wallet)"
     }
 }
