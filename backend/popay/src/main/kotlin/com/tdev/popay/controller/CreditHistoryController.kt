@@ -49,7 +49,6 @@ class CreditHistoryController(
     @PutMapping("/credit_history/{id}")
     fun updateCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long,
                         @Valid @RequestBody newCreditHistory: CreditHistory): ResponseEntity<CreditHistory> {
-
         return creditHistoryRepository.findById(creditHistoryId).map { existingCreditHistory ->
             val updatedCreditHistory: CreditHistory = existingCreditHistory
                     .copy(
@@ -58,17 +57,14 @@ class CreditHistoryController(
                     )
             ResponseEntity.ok().body(creditHistoryRepository.save(updatedCreditHistory))
         }.orElse(ResponseEntity.notFound().build())
-
     }
 
     @DeleteMapping("/credit_history/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long): ResponseEntity<Void> {
-
         return creditHistoryRepository.findById(creditHistoryId).map { creditHistory  ->
             creditHistoryRepository.delete(creditHistory)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
-
     }
 }

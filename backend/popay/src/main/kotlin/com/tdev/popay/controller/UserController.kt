@@ -37,7 +37,6 @@ class UserController(private val userRepository: UserRepository) {
     @PutMapping("/user/{id}")
     fun updateUserById(@PathVariable(value = "id") userId: Long,
                        @Valid @RequestBody newUser: User): ResponseEntity<User> {
-
         return userRepository.findById(userId).map { existingUser ->
             val updatedUser: User = existingUser
                     .copy(
@@ -49,17 +48,14 @@ class UserController(private val userRepository: UserRepository) {
                     )
             ResponseEntity.ok().body(userRepository.save(updatedUser))
         }.orElse(ResponseEntity.notFound().build())
-
     }
 
     @DeleteMapping("/user/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<Void> {
-
         return userRepository.findById(userId).map { user  ->
             userRepository.delete(user)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
-
     }
 }

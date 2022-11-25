@@ -49,7 +49,6 @@ class CartController(
     @PutMapping("/cart/{id}")
     fun updateCartById(@PathVariable(value = "id") cartId: Long,
                        @Valid @RequestBody newCart: Cart): ResponseEntity<Cart> {
-
         return cartRepository.findById(cartId).map { existingCart ->
             val updatedCart: Cart = existingCart
                     .copy(
@@ -62,11 +61,9 @@ class CartController(
 
     @DeleteMapping("/cart/{id}")
     fun deleteCartById(@PathVariable(value = "id") cartId: Long): ResponseEntity<Void> {
-
         return cartRepository.findById(cartId).map { cart  ->
             cartRepository.delete(cart)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
-
     }
 }
