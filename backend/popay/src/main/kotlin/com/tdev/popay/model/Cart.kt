@@ -34,6 +34,6 @@ data class Cart(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_cart = $id , amount = $total_amount , date = $payment_date , user = $user)"
+        return this::class.simpleName + "(id_cart = $id , total_amount = $total_amount , payment_date = $payment_date , user = $user)"
     }
 }

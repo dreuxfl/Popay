@@ -34,6 +34,6 @@ data class CreditHistory(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_credit_history = $id , credit = $amount , date = $transaction_date , user = $user)"
+        return this::class.simpleName + "(id_credit_history = $id , credit = $amount , transaction_date = $transaction_date , user = $user)"
     }
 }
