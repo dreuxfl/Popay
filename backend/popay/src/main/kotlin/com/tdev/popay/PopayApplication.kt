@@ -1,11 +1,11 @@
-package com.poPay.poPay
+package com.tdev.popay
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class PoPayApplication
+class PopayApplication
 
 fun main(args: Array<String>) {
-	runApplication<PoPayApplication>(*args)
+	runApplication<PopayApplication>(*args)
 }
