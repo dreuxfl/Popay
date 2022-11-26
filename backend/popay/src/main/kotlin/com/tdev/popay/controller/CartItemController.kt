@@ -54,7 +54,7 @@ class CartItemController(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    /*@PutMapping("/cart_item/{id}")
+    @PutMapping("/cart_item/{id}")
     fun updateCartItemById(@PathVariable(value = "id") cartItemId: Long,
                            @Valid @RequestBody newCartItem: CartItem): ResponseEntity<CartItem> {
         return cartItemRepository.findById(cartItemId).map { existingCartItem ->
@@ -64,7 +64,7 @@ class CartItemController(
                     )
             ResponseEntity.ok().body(cartItemRepository.save(updatedCartItem))
         }.orElse(ResponseEntity.notFound().build())
-    }*/
+    }
 
     @DeleteMapping("/cart_item/{id}")
     fun deleteCartItemById(@PathVariable(value = "id") cartItemId: Long): ResponseEntity<Void> {
