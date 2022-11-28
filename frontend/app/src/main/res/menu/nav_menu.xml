@@ -2,15 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-<!--    <item
+    <item
         android:id="@+id/loginFragment"
         android:icon="@drawable/ic_baseline_account_circle_24"
         android:title="@string/menu_user"
-    />-->
+        android:iconTint="@color/green3"
+        />
     <item
-        android:id="@+id/scanFragment"
-        android:icon="@drawable/ic_baseline_qr_code_scanner_24"
-        android:title="@string/menu_scan"
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/menu_home"
+        android:iconTint="@color/green3"
+
+        />
+    <item
+        android:id="@+id/creditFragment"
+        android:icon="@drawable/ic_baseline_attach_money_24"
+        android:title="@string/menu_credit"
+        android:iconTint="@color/green3"
     />
 
 </menu>

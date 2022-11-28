@@ -5,15 +5,19 @@
     android:id="@+id/nav_main.xml"
     app:startDestination="@id/scanFragment">
 
-<!--    <fragment
+    <fragment
         android:id="@+id/loginFragment"
         android:name="com.popay.ui.main.ui.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />-->
+        tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/scanFragment"
-        android:name="com.popay.ScanFragment"
+        android:name="com.popay.HomeFragment"
         android:label="fragment_scan"
-        tools:layout="@layout/fragment_scan" />
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/creditFragment2"
+        android:name="com.popay.CreditFragment"
+        android:label="CreditFragment" />
 
 </navigation>
