@@ -1,5 +1,6 @@
 package com.tdev.popay.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.Hibernate
 import javax.persistence.*
 import javax.validation.constraints.*
@@ -17,6 +18,7 @@ data class User(
     @get: NotBlank(message = "Email is mandatory")
     @get: Email(message = "Email should be valid")
     val email: String = "",
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @get: NotBlank(message = "Password is mandatory")
     @get: Size(min = 8, message = "Password should be at least 8 characters")
     val password: String = "",
