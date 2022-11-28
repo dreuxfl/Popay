@@ -1,9 +1,11 @@
 package com.tdev.popay.controller
 
+import com.tdev.popay.dtos.LoginUser
 import com.tdev.popay.model.User
 import com.tdev.popay.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -23,9 +25,20 @@ class UserController(private val userRepository: UserRepository) {
     fun getAllUsers(): List<User> =
             userRepository.findAll()
 
-    @PostMapping("/user")
-    fun createUser(@Valid @RequestBody user: User): User =
-            userRepository.save(user)
+    @PostMapping("/register")
+    fun createUser(@Valid @RequestBody user: User): ResponseEntity<User> {
+        return userRepository.findByEmail(user.email).map { ResponseEntity(it, HttpStatus.CONFLICT) }
+            .orElseGet {
+                val newUser = user.copy(password = BCryptPasswordEncoder().encode(user.password))
+                ResponseEntity(userRepository.save(newUser), HttpStatus.CREATED)
+            }
+    }
+
+    @PostMapping("/login")
+    fun loginUser(@Valid @RequestBody user: LoginUser): ResponseEntity<User>? {
+        return userRepository.findByEmail(user.email).map { ResponseEntity(it, HttpStatus.OK) }
+            .orElseGet { ResponseEntity(HttpStatus.NOT_FOUND) }
+    }
 
     @GetMapping("/user/{id}")
     fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<User> {
@@ -43,7 +56,7 @@ class UserController(private val userRepository: UserRepository) {
                         first_name = newUser.first_name,
                         last_name = newUser.last_name,
                         email = newUser.email,
-                        password = newUser.password,
+                        password = BCryptPasswordEncoder().encode(newUser.password),
                         wallet = newUser.wallet
                     )
             ResponseEntity.ok().body(userRepository.save(updatedUser))

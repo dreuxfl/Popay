@@ -6,7 +6,7 @@ import javax.persistence.*
 import javax.validation.constraints.*
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = [UniqueConstraint(columnNames = ["email"])])
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
