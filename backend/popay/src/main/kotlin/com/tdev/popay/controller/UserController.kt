@@ -1,6 +1,7 @@
 package com.tdev.popay.controller
 
 import com.tdev.popay.dtos.LoginUser
+import com.tdev.popay.dtos.ResponseMessage
 import com.tdev.popay.model.User
 import com.tdev.popay.repository.UserRepository
 import org.springframework.http.HttpStatus
@@ -21,54 +22,73 @@ class UserController(private val userRepository: UserRepository) {
         return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
-    @GetMapping("/users")
-    fun getAllUsers(): List<User> =
-            userRepository.findAll()
-
     @PostMapping("/register")
-    fun createUser(@Valid @RequestBody user: User): ResponseEntity<User> {
-        return userRepository.findByEmail(user.email).map { ResponseEntity(it, HttpStatus.CONFLICT) }
-            .orElseGet {
-                val newUser = user.copy(password = BCryptPasswordEncoder().encode(user.password))
-                ResponseEntity(userRepository.save(newUser), HttpStatus.CREATED)
-            }
+    fun createUser(@Valid @RequestBody newUser: User): ResponseEntity<Any> {
+        val userAlreadyExist = userRepository.findByEmail(newUser.email)
+        if (!userAlreadyExist.isPresent) {
+            val user = User(
+                first_name = newUser.first_name,
+                last_name = newUser.last_name,
+                email = newUser.email,
+                password = BCryptPasswordEncoder().encode(newUser.password),
+                wallet = newUser.wallet
+            )
+            userRepository.save(user)
+            return ResponseEntity(ResponseMessage(true, "User registered successfully"), HttpStatus.CREATED)
+        }
+        return ResponseEntity(ResponseMessage(false, "User already exist"), HttpStatus.BAD_REQUEST)
     }
 
     @PostMapping("/login")
-    fun loginUser(@Valid @RequestBody user: LoginUser): ResponseEntity<User>? {
-        return userRepository.findByEmail(user.email).map { ResponseEntity(it, HttpStatus.OK) }
-            .orElseGet { ResponseEntity(HttpStatus.NOT_FOUND) }
+    fun loginUser(@Valid @RequestBody loginUser: LoginUser): ResponseEntity<Any> {
+        val checkUser = userRepository.findByEmail(loginUser.email)
+        if (checkUser.isPresent) {
+            val user = checkUser.get()
+            if (user.comparePassword(loginUser.password)) {
+                return ResponseEntity(ResponseMessage(true, "User logged in successfully"), HttpStatus.OK)
+            }
+        }
+        return ResponseEntity(ResponseMessage(false, "Invalid credentials"), HttpStatus.BAD_REQUEST)
     }
 
+    @GetMapping("/users")
+    fun getAllUsers(): List<User> =
+        userRepository.findAll()
+
     @GetMapping("/user/{id}")
-    fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<User> {
-        return userRepository.findById(userId).map { user ->
-            ResponseEntity.ok(user)
-        }.orElse(ResponseEntity.notFound().build())
+    fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<Any> {
+        val checkUser = userRepository.findById(userId)
+        if (checkUser.isPresent) {
+            return ResponseEntity(checkUser.get(), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
     }
 
     @PutMapping("/user/{id}")
     fun updateUserById(@PathVariable(value = "id") userId: Long,
-                       @Valid @RequestBody newUser: User): ResponseEntity<User> {
-        return userRepository.findById(userId).map { existingUser ->
-            val updatedUser: User = existingUser
-                    .copy(
-                        first_name = newUser.first_name,
-                        last_name = newUser.last_name,
-                        email = newUser.email,
-                        password = BCryptPasswordEncoder().encode(newUser.password),
-                        wallet = newUser.wallet
-                    )
-            ResponseEntity.ok().body(userRepository.save(updatedUser))
-        }.orElse(ResponseEntity.notFound().build())
+                       @Valid @RequestBody updatedUser: User): ResponseEntity<Any> {
+        val checkUser = userRepository.findById(userId)
+        if (checkUser.isPresent) {
+            val user = checkUser.get().copy(
+                first_name = updatedUser.first_name,
+                last_name = updatedUser.last_name,
+                email = updatedUser.email,
+                password = BCryptPasswordEncoder().encode(updatedUser.password),
+                wallet = updatedUser.wallet
+            )
+            userRepository.save(user)
+            return ResponseEntity(ResponseMessage(true, "User updated successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
     }
 
     @DeleteMapping("/user/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun removeUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<Void> {
-        return userRepository.findById(userId).map { user  ->
-            userRepository.delete(user)
-            ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
+    fun removeUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<Any> {
+        val checkUser = userRepository.findById(userId)
+        if (checkUser.isPresent) {
+            userRepository.deleteById(userId)
+            return ResponseEntity(ResponseMessage(true, "User deleted successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
     }
 }
