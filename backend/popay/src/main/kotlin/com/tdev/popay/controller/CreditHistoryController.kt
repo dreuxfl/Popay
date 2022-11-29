@@ -1,5 +1,6 @@
 package com.tdev.popay.controller
 
+import com.tdev.popay.dtos.ResponseMessage
 import com.tdev.popay.model.CreditHistory
 import com.tdev.popay.repository.CreditHistoryRepository
 import com.tdev.popay.repository.UserRepository
@@ -23,48 +24,57 @@ class CreditHistoryController(
         return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
-    @GetMapping("/credit_histories")
-    fun getAllCreditHistories(): List<CreditHistory> =
-            creditHistoryRepository.findAll()
-
     @PostMapping("/credit_history/{user_id}")
     fun createCreditHistory(@PathVariable(value = "user_id") userId: Long,
-                            @Valid @RequestBody creditHistory: CreditHistory): ResponseEntity<CreditHistory> {
-        return userRepository.findById(userId).map { user ->
-            val newCreditHistory = creditHistory
-                .copy(
-                    user = user
-                )
-            ResponseEntity.ok().body(creditHistoryRepository.save(newCreditHistory))
-        }.orElse(ResponseEntity.notFound().build())
+                            @Valid @RequestBody creditHistory: CreditHistory): ResponseEntity<Any> {
+        val checkUser = userRepository.findById(userId)
+        if (checkUser.isPresent) {
+            val user = checkUser.get()
+            val newCreditHistory = CreditHistory(
+                user = user,
+                amount = creditHistory.amount
+            )
+            creditHistoryRepository.save(newCreditHistory)
+            return ResponseEntity(ResponseMessage(true, "Credit history created successfully"), HttpStatus.CREATED)
+        }
+        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
     }
 
+    @GetMapping("/credit_histories")
+    fun getAllCreditHistories(): List<CreditHistory> =
+        creditHistoryRepository.findAll()
+
     @GetMapping("/credit_history/{id}")
-    fun getCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long): ResponseEntity<CreditHistory> {
-        return creditHistoryRepository.findById(creditHistoryId).map { creditHistory ->
-            ResponseEntity.ok(creditHistory)
-        }.orElse(ResponseEntity.notFound().build())
+    fun getCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long): ResponseEntity<Any> {
+        val checkCreditHistory = creditHistoryRepository.findById(creditHistoryId)
+        if (checkCreditHistory.isPresent) {
+            return ResponseEntity(checkCreditHistory.get(), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Credit history not found"), HttpStatus.BAD_REQUEST)
     }
 
     @PutMapping("/credit_history/{id}")
     fun updateCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long,
-                        @Valid @RequestBody newCreditHistory: CreditHistory): ResponseEntity<CreditHistory> {
-        return creditHistoryRepository.findById(creditHistoryId).map { existingCreditHistory ->
-            val updatedCreditHistory: CreditHistory = existingCreditHistory
-                    .copy(
-                        amount = newCreditHistory.amount,
-                        transaction_date = newCreditHistory.transaction_date
-                    )
-            ResponseEntity.ok().body(creditHistoryRepository.save(updatedCreditHistory))
-        }.orElse(ResponseEntity.notFound().build())
+                        @Valid @RequestBody newCreditHistory: CreditHistory): ResponseEntity<Any> {
+        val checkCreditHistory = creditHistoryRepository.findById(creditHistoryId)
+        if (checkCreditHistory.isPresent) {
+            val creditHistory = checkCreditHistory.get().copy(
+                amount = newCreditHistory.amount
+            )
+            creditHistoryRepository.save(creditHistory)
+            return ResponseEntity(ResponseMessage(true, "Credit history updated successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Credit history not found"), HttpStatus.BAD_REQUEST)
     }
 
     @DeleteMapping("/credit_history/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun removeCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long): ResponseEntity<Void> {
-        return creditHistoryRepository.findById(creditHistoryId).map { creditHistory  ->
-            creditHistoryRepository.delete(creditHistory)
-            ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
+    fun removeCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long): ResponseEntity<Any> {
+        val checkCreditHistory = creditHistoryRepository.findById(creditHistoryId)
+        if (checkCreditHistory.isPresent) {
+            creditHistoryRepository.deleteById(creditHistoryId)
+            return ResponseEntity(ResponseMessage(true, "Credit history deleted successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Credit history not found"), HttpStatus.BAD_REQUEST)
     }
 }
