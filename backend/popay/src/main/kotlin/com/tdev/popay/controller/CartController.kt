@@ -1,5 +1,6 @@
 package com.tdev.popay.controller
 
+import com.tdev.popay.dtos.ResponseMessage
 import com.tdev.popay.model.Cart
 import com.tdev.popay.repository.CartRepository
 import com.tdev.popay.repository.UserRepository
@@ -23,47 +24,56 @@ class CartController(
         return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
-    @GetMapping("/carts")
-    fun getAllCarts(): List<Cart> =
-            cartRepository.findAll()
-
     @PostMapping("/cart/{user_id}")
     fun createCart(@PathVariable(value = "user_id") userId: Long,
-                   @Valid @RequestBody cart: Cart): ResponseEntity<Cart> {
-        return userRepository.findById(userId).map { user ->
-            val newCart = cart
-                .copy(
-                    user = user
-                )
-            ResponseEntity.ok().body(cartRepository.save(newCart))
-        }.orElse(ResponseEntity.notFound().build())
+                   @Valid @RequestBody cart: Cart): ResponseEntity<Any> {
+        val checkUser = userRepository.findById(userId)
+        if (checkUser.isPresent) {
+            val user = checkUser.get()
+            val newCart = Cart(
+                user = user,
+                total_amount = cart.total_amount
+            )
+            cartRepository.save(newCart)
+            return ResponseEntity(ResponseMessage(true, "Cart created successfully"), HttpStatus.CREATED)
+        }
+        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
     }
 
+    @GetMapping("/carts")
+    fun getAllCarts(): List<Cart> =
+        cartRepository.findAll()
+
     @GetMapping("/cart/{id}")
-    fun getCartById(@PathVariable(value = "id") cartId: Long): ResponseEntity<Cart> {
-        return cartRepository.findById(cartId).map { cart ->
-            ResponseEntity.ok(cart)
-        }.orElse(ResponseEntity.notFound().build())
+    fun getCartById(@PathVariable(value = "id") cartId: Long): ResponseEntity<Any> {
+        val checkCart = cartRepository.findById(cartId)
+        if (checkCart.isPresent) {
+            return ResponseEntity(checkCart.get(), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
     }
 
     @PutMapping("/cart/{id}")
     fun updateCartById(@PathVariable(value = "id") cartId: Long,
-                       @Valid @RequestBody newCart: Cart): ResponseEntity<Cart> {
-        return cartRepository.findById(cartId).map { existingCart ->
-            val updatedCart: Cart = existingCart
-                    .copy(
-                        total_amount = newCart.total_amount,
-                        payment_date = newCart.payment_date
-                    )
-            ResponseEntity.ok().body(cartRepository.save(updatedCart))
-        }.orElse(ResponseEntity.notFound().build())
+                       @Valid @RequestBody newCart: Cart): ResponseEntity<Any> {
+        val checkCart = cartRepository.findById(cartId)
+        if (checkCart.isPresent) {
+            val cart = checkCart.get().copy(
+                total_amount = newCart.total_amount
+            )
+            cartRepository.save(cart)
+            return ResponseEntity(ResponseMessage(true, "Cart updated successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
     }
 
     @DeleteMapping("/cart/{id}")
-    fun deleteCartById(@PathVariable(value = "id") cartId: Long): ResponseEntity<Void> {
-        return cartRepository.findById(cartId).map { cart  ->
-            cartRepository.delete(cart)
-            ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
+    fun deleteCartById(@PathVariable(value = "id") cartId: Long): ResponseEntity<Any> {
+        val checkCart = cartRepository.findById(cartId)
+        if (checkCart.isPresent) {
+            cartRepository.delete(checkCart.get())
+            return ResponseEntity(ResponseMessage(true, "Cart deleted successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
     }
 }
