@@ -1,17 +1,17 @@
 package com.popay
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import com.popay.ui.main.SectionsPagerAdapter
+import android.widget.Button
+
 import com.popay.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
 
     private lateinit var binding: ActivityMainBinding
 
@@ -20,11 +20,17 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val btnScan = findViewById<Button>(R.id.scanBtn)
+        btnScan.setOnClickListener {
+            val intent = Intent(this, QRCodeScannerActivity::class.java)
+            startActivity(intent)
+        }
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
+        val btnNfc = findViewById<Button>(R.id.btnNfc)
+        btnNfc.setOnClickListener {
+            val intent = Intent(this, NfcReaderActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
