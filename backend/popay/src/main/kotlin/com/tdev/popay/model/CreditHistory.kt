@@ -11,7 +11,7 @@ data class CreditHistory(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @get: DecimalMin(value = "1.0", inclusive = false, message = "Amount must be greater than 1")
+    @get: DecimalMin(value = "0.01", inclusive = false, message = "Amount must be greater than 1")
     val amount: Double = 0.0,
     val transaction_date: LocalDateTime = LocalDateTime.now(),
     @ManyToOne(fetch = FetchType.LAZY)
