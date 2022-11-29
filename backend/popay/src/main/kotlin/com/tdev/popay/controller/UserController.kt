@@ -4,11 +4,13 @@ import com.tdev.popay.dtos.LoginUser
 import com.tdev.popay.dtos.ResponseMessage
 import com.tdev.popay.model.User
 import com.tdev.popay.repository.UserRepository
+import io.jsonwebtoken.Jwts
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
+import java.security.Key
 import java.util.*
 import javax.validation.Valid
 
@@ -23,7 +25,7 @@ class UserController(private val userRepository: UserRepository) {
     }
 
     @PostMapping("/register")
-    fun createUser(@Valid @RequestBody newUser: User): ResponseEntity<Any> {
+    fun registerUser(@Valid @RequestBody newUser: User): ResponseEntity<Any> {
         val userAlreadyExist = userRepository.findByEmail(newUser.email)
         if (!userAlreadyExist.isPresent) {
             val user = User(
@@ -45,7 +47,16 @@ class UserController(private val userRepository: UserRepository) {
         if (checkUser.isPresent) {
             val user = checkUser.get()
             if (user.comparePassword(loginUser.password)) {
-                return ResponseEntity(ResponseMessage(true, "User logged in successfully"), HttpStatus.OK)
+                val issuer = user.id.toString()
+                val key = io.jsonwebtoken.security.Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256)
+                val token = Jwts.builder()
+                    .setSubject(user.id.toString())
+                    .setIssuer(issuer)
+                    .setIssuedAt(Date())
+                    .setExpiration(Date(System.currentTimeMillis() + 3600000))
+                    .signWith(key).compact()
+                val jsonToken = mapOf("token" to token)
+                return ResponseEntity(jsonToken, HttpStatus.OK)
             }
         }
         return ResponseEntity(ResponseMessage(false, "Invalid credentials"), HttpStatus.BAD_REQUEST)
