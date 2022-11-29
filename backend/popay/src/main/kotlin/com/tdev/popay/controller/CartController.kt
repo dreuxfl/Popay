@@ -71,7 +71,7 @@ class CartController(
     fun deleteCartById(@PathVariable(value = "id") cartId: Long): ResponseEntity<Any> {
         val checkCart = cartRepository.findById(cartId)
         if (checkCart.isPresent) {
-            cartRepository.delete(checkCart.get())
+            cartRepository.deleteById(cartId)
             return ResponseEntity(ResponseMessage(true, "Cart deleted successfully"), HttpStatus.OK)
         }
         return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
