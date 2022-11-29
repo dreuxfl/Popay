@@ -7,6 +7,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_credit">Credit</string>
     <!-- Strings related to login -->
+    <string name="popay_logo_description">poPay Logo</string>
+
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
