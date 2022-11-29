@@ -10,6 +10,7 @@
         <item name="colorSecondaryVariant">@color/granite</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
+        <item name="colorOnSurface">@color/granite</item>
         <item name="android:statusBarColor">?attr/colorSecondary</item>
         <item name="android:navigationBarColor">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->

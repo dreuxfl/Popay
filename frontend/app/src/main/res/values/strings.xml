@@ -3,16 +3,21 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <!-- Navigation Menu -->
-    <string name="menu_user">Profile</string>
+    <string name="menu_register">Register</string>
+    <string name="menu_login">Login</string>
+
     <string name="menu_home">Home</string>
     <string name="menu_credit">Credit</string>
     <!-- Strings related to login -->
     <string name="popay_logo_description">poPay Logo</string>
 
+    <string name="prompt_first_name">First name</string>
+    <string name="prompt_last_name">Last name</string>
+
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
     <string name="welcome">"Welcome!"</string>
     <string name="invalid_first_name">First name is required</string>
     <string name="invalid_last_name">First name is required</string>
