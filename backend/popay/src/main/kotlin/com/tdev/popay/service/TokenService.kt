@@ -2,14 +2,17 @@ package com.tdev.popay.service
 
 import com.tdev.popay.model.User
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Service
+import java.security.Key
 import java.util.*
 
 @Service
 class TokenService {
     fun createToken(user: User): String {
         val issuer = user.id.toString()
-        val key = io.jsonwebtoken.security.Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256)
+        val key: Key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
         return Jwts.builder()
             .setSubject(user.id.toString())
             .setIssuer(issuer)
