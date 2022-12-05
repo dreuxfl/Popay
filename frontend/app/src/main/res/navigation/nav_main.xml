@@ -26,4 +26,9 @@
         android:name="com.popay.CreditFragment"
         android:label="fragment_credit"
         tools:layout="@layout/fragment_credit" />
+    <activity
+        android:id="@+id/QRCodeScannerActivity"
+        android:name="com.popay.QRCodeScannerActivity"
+        android:label="qrcode_scanner"
+        tools:layout="@layout/qrcode_scanner" />
 </navigation>

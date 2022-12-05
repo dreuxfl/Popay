@@ -9,7 +9,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 
 import com.popay.databinding.ActivityMainBinding
@@ -24,17 +23,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val btnScan = findViewById<Button>(R.id.scanBtn)
-        btnScan.setOnClickListener {
-            val intent = Intent(this, QRCodeScannerActivity::class.java)
-            startActivity(intent)
-        }
-
-        val btnNfc = findViewById<Button>(R.id.btnNfc)
-        btnNfc.setOnClickListener {
-            val intent = Intent(this, NfcReaderActivity::class.java)
-            startActivity(intent)
-        }
 
         navController=Navigation.findNavController(this, R.id.activity_main_nav_host_fragment)
         setupWithNavController(binding.bottomNavigationView, navController)
