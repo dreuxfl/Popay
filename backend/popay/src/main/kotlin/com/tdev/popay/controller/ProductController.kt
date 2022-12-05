@@ -33,8 +33,7 @@ class ProductController(private val productRepository: ProductRepository) {
     }
 
     @GetMapping("/products")
-    fun getAllProducts(): List<Product> =
-        productRepository.findAll()
+    fun getAllProducts(): List<Product> = productRepository.findAll()
 
     @GetMapping("/product/{id}")
     fun getProductById(@PathVariable(value = "id") productId: Long): ResponseEntity<Any> {
@@ -46,8 +45,10 @@ class ProductController(private val productRepository: ProductRepository) {
     }
 
     @PutMapping("/product/{id}")
-    fun updateProductById(@PathVariable(value = "id") productId: Long,
-                          @Valid @RequestBody newProduct: Product): ResponseEntity<Any> {
+    fun updateProductById(
+        @PathVariable(value = "id") productId: Long,
+        @Valid @RequestBody newProduct: Product
+    ): ResponseEntity<Any> {
         val checkProduct = productRepository.findById(productId)
         if (checkProduct.isPresent) {
             val product = checkProduct.get().copy(

@@ -25,8 +25,10 @@ class CartController(
     }
 
     @PostMapping("/cart/{user_id}")
-    fun createCart(@PathVariable(value = "user_id") userId: Long,
-                   @Valid @RequestBody cart: Cart): ResponseEntity<Any> {
+    fun createCart(
+        @PathVariable(value = "user_id") userId: Long,
+        @Valid @RequestBody cart: Cart
+    ): ResponseEntity<Any> {
         val checkUser = userRepository.findById(userId)
         if (checkUser.isPresent) {
             val user = checkUser.get()
@@ -41,8 +43,7 @@ class CartController(
     }
 
     @GetMapping("/carts")
-    fun getAllCarts(): List<Cart> =
-        cartRepository.findAll()
+    fun getAllCarts(): List<Cart> = cartRepository.findAll()
 
     @GetMapping("/cart/{id}")
     fun getCartById(@PathVariable(value = "id") cartId: Long): ResponseEntity<Any> {
@@ -54,8 +55,10 @@ class CartController(
     }
 
     @PutMapping("/cart/{id}")
-    fun updateCartById(@PathVariable(value = "id") cartId: Long,
-                       @Valid @RequestBody newCart: Cart): ResponseEntity<Any> {
+    fun updateCartById(
+        @PathVariable(value = "id") cartId: Long,
+        @Valid @RequestBody newCart: Cart
+    ): ResponseEntity<Any> {
         val checkCart = cartRepository.findById(cartId)
         if (checkCart.isPresent) {
             val cart = checkCart.get().copy(

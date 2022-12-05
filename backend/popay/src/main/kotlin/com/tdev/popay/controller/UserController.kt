@@ -46,7 +46,7 @@ class UserController(private val userRepository: UserRepository) {
         if (checkUser.isPresent) {
             val user = checkUser.get()
             if (user.comparePassword(loginDto.password)) {
-                val token = TokenService().createToken(user)
+                val token = TokenService().generateToken(user)
                 val jsonToken = mapOf("token" to token)
                 return ResponseEntity(jsonToken, HttpStatus.OK)
             }
@@ -55,8 +55,7 @@ class UserController(private val userRepository: UserRepository) {
     }
 
     @GetMapping("/users")
-    fun getAllUsers(): List<User> =
-        userRepository.findAll()
+    fun getAllUsers(): List<User> = userRepository.findAll()
 
     @GetMapping("/user/{id}")
     fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<Any> {
@@ -68,8 +67,10 @@ class UserController(private val userRepository: UserRepository) {
     }
 
     @PutMapping("/user/{id}")
-    fun updateUserById(@PathVariable(value = "id") userId: Long,
-                       @Valid @RequestBody updatedUser: User): ResponseEntity<Any> {
+    fun updateUserById(
+        @PathVariable(value = "id") userId: Long,
+        @Valid @RequestBody updatedUser: User
+    ): ResponseEntity<Any> {
         val checkUser = userRepository.findById(userId)
         if (checkUser.isPresent) {
             val user = checkUser.get().copy(

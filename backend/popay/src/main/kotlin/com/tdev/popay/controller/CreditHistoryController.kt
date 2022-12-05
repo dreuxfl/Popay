@@ -25,8 +25,10 @@ class CreditHistoryController(
     }
 
     @PostMapping("/credit_history/{user_id}")
-    fun createCreditHistory(@PathVariable(value = "user_id") userId: Long,
-                            @Valid @RequestBody creditHistory: CreditHistory): ResponseEntity<Any> {
+    fun createCreditHistory(
+        @PathVariable(value = "user_id") userId: Long,
+        @Valid @RequestBody creditHistory: CreditHistory
+    ): ResponseEntity<Any> {
         val checkUser = userRepository.findById(userId)
         if (checkUser.isPresent) {
             val user = checkUser.get()
@@ -41,8 +43,7 @@ class CreditHistoryController(
     }
 
     @GetMapping("/credit_histories")
-    fun getAllCreditHistories(): List<CreditHistory> =
-        creditHistoryRepository.findAll()
+    fun getAllCreditHistories(): List<CreditHistory> = creditHistoryRepository.findAll()
 
     @GetMapping("/credit_history/{id}")
     fun getCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long): ResponseEntity<Any> {
@@ -54,8 +55,10 @@ class CreditHistoryController(
     }
 
     @PutMapping("/credit_history/{id}")
-    fun updateCreditHistoryById(@PathVariable(value = "id") creditHistoryId: Long,
-                        @Valid @RequestBody newCreditHistory: CreditHistory): ResponseEntity<Any> {
+    fun updateCreditHistoryById(
+        @PathVariable(value = "id") creditHistoryId: Long,
+        @Valid @RequestBody newCreditHistory: CreditHistory
+    ): ResponseEntity<Any> {
         val checkCreditHistory = creditHistoryRepository.findById(creditHistoryId)
         if (checkCreditHistory.isPresent) {
             val creditHistory = checkCreditHistory.get().copy(

@@ -45,6 +45,6 @@ data class User(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_user = $id , first_name = $first_name , last_name = $last_name , email = $email , password = $password , wallet = $wallet)"
+        return this::class.simpleName + "(id_user = $id, first_name = $first_name, last_name = $last_name, email = $email, wallet = $wallet)"
     }
 }
