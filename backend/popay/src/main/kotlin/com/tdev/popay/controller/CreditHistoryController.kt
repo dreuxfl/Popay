@@ -1,6 +1,6 @@
 package com.tdev.popay.controller
 
-import com.tdev.popay.dtos.ResponseMessage
+import com.tdev.popay.dto.ResponseMessage
 import com.tdev.popay.model.CreditHistory
 import com.tdev.popay.repository.CreditHistoryRepository
 import com.tdev.popay.repository.UserRepository

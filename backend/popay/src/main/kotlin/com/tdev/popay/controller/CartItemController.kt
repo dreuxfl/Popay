@@ -1,6 +1,6 @@
 package com.tdev.popay.controller
 
-import com.tdev.popay.dtos.ResponseMessage
+import com.tdev.popay.dto.ResponseMessage
 import com.tdev.popay.model.CartItem
 import com.tdev.popay.repository.CartItemRepository
 import com.tdev.popay.repository.CartRepository

@@ -1,6 +1,6 @@
 package com.tdev.popay.controller
 
-import com.tdev.popay.dtos.ResponseMessage
+import com.tdev.popay.dto.ResponseMessage
 import com.tdev.popay.model.Product
 import com.tdev.popay.repository.ProductRepository
 import org.springframework.http.HttpStatus

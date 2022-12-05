@@ -1,3 +1,3 @@
-package com.tdev.popay.dtos
+package com.tdev.popay.dto
 
 class ResponseMessage(var success: Boolean, var message: String) {}

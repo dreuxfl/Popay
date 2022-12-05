@@ -1,16 +1,15 @@
 package com.tdev.popay.controller
 
-import com.tdev.popay.dtos.LoginUser
-import com.tdev.popay.dtos.ResponseMessage
+import com.tdev.popay.dto.LoginDto
+import com.tdev.popay.dto.ResponseMessage
 import com.tdev.popay.model.User
 import com.tdev.popay.repository.UserRepository
-import io.jsonwebtoken.Jwts
+import com.tdev.popay.service.TokenService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
-import java.security.Key
 import java.util.*
 import javax.validation.Valid
 
@@ -42,19 +41,12 @@ class UserController(private val userRepository: UserRepository) {
     }
 
     @PostMapping("/login")
-    fun loginUser(@Valid @RequestBody loginUser: LoginUser): ResponseEntity<Any> {
-        val checkUser = userRepository.findByEmail(loginUser.email)
+    fun loginUser(@Valid @RequestBody loginDto: LoginDto): ResponseEntity<Any> {
+        val checkUser = userRepository.findByEmail(loginDto.email)
         if (checkUser.isPresent) {
             val user = checkUser.get()
-            if (user.comparePassword(loginUser.password)) {
-                val issuer = user.id.toString()
-                val key = io.jsonwebtoken.security.Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256)
-                val token = Jwts.builder()
-                    .setSubject(user.id.toString())
-                    .setIssuer(issuer)
-                    .setIssuedAt(Date())
-                    .setExpiration(Date(System.currentTimeMillis() + 3600000))
-                    .signWith(key).compact()
+            if (user.comparePassword(loginDto.password)) {
+                val token = TokenService().createToken(user)
                 val jsonToken = mapOf("token" to token)
                 return ResponseEntity(jsonToken, HttpStatus.OK)
             }
