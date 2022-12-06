@@ -4,41 +4,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.popay.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment() {
-    private var firstName = ""
-    private var lastName = ""
-    private var email = ""
-    private var password = ""
-    private var confirmPassword = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_register, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        binding.registerEmail.doOnTextChanged { text, _, _, count ->
+            val regex = Regex("/\\w+@\\w+.\\w/g")
+            if(count > 0){
+                if(regex.matches(text.toString())) {
+                    binding.registerEmailLayout.error = null
+                } else binding.registerEmailLayout.error = "Invalid e-mail"
+            }
+        }
 
-        firstName = view?.findViewById<TextView>(R.id.register_first_name)?.text.toString()
-        lastName = view?.findViewById<TextView>(R.id.register_last_name)?.text.toString()
-        email = view?.findViewById<TextView>(R.id.register_email)?.text.toString()
-        password = view?.findViewById<TextView>(R.id.register_password)?.text.toString()
-        confirmPassword = view?.findViewById<TextView>(R.id.register_confirm_password)?.text.toString()
+        binding.registerPassword.doOnTextChanged { text, _, _, _ ->
+            if(text!!.length >= 8){
+                binding.registerPasswordLayout.error = null
+            } else binding.registerPasswordLayout.error = "Password must 8 or more characters long"
+        }
 
-        // get reference to button
-        val btnRegister = view?.findViewById<Button>(R.id.register)
-
-        /*btn_register.setOnClickListener {
-        }*/
-        return view
+        binding.registerPassword1.doOnTextChanged { text, _, _, _ ->
+            if(text!!.length >= 8){
+                binding.registerPassword1Layout.error = null
+            } else binding.registerPasswordLayout.error = "Password must 8 or more characters long"
+        }
+        return binding.root
     }
 
 

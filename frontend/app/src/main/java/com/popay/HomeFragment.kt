@@ -18,12 +18,12 @@ class HomeFragment : Fragment() {
 
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
-        view.findViewById<Button>(R.id.scan_btn).setOnClickListener { view ->
+        view.findViewById<Button>(R.id.scan_btn).setOnClickListener { _ ->
             val intent = Intent (activity, QRCodeScannerActivity::class.java)
             activity?.startActivity(intent)
         }
 
-        view.findViewById<Button>(R.id.nfc_btn).setOnClickListener { view ->
+        view.findViewById<Button>(R.id.nfc_btn).setOnClickListener { _ ->
             val intent = Intent (activity, NfcReaderActivity::class.java)
             activity?.startActivity(intent)
         }
