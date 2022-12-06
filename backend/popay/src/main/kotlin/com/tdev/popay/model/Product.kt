@@ -1,8 +1,8 @@
 package com.tdev.popay.model
 
 import org.hibernate.Hibernate
-import javax.persistence.*
-import javax.validation.constraints.*
+import jakarta.persistence.*
+import jakarta.validation.constraints.*
 
 @Entity
 @Table(name = "product")
@@ -10,7 +10,7 @@ data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @get: DecimalMin(value = "1.0", inclusive = false, message = "Price must be greater than 1")
+    @get: DecimalMin(value = "0.01", inclusive = false, message = "Price must be greater than 1")
     val price: Double = 0.0,
     @get: NotBlank(message = "Caption is mandatory")
     val caption: String = "",

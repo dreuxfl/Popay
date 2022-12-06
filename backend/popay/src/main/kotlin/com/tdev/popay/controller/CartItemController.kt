@@ -1,5 +1,6 @@
 package com.tdev.popay.controller
 
+import com.tdev.popay.dto.ResponseMessage
 import com.tdev.popay.model.CartItem
 import com.tdev.popay.repository.CartItemRepository
 import com.tdev.popay.repository.CartRepository
@@ -9,7 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import javax.validation.Valid
+import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("/api")
@@ -25,52 +26,66 @@ class CartItemController(
         return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
-    @GetMapping("/cart_items")
-    fun getAllCartItems(): List<CartItem> =
-            cartItemRepository.findAll()
-
     @PostMapping("/cart_item/{cart_id}/{product_id}")
-    fun createCartItem(@PathVariable(value = "cart_id") cartId: Long,
-                       @PathVariable(value = "product_id") productId: Long,
-                       @Valid @RequestBody cartItem: CartItem
-    ): ResponseEntity<CartItem> {
-        return cartRepository.findById(cartId).map { cart ->
-            productRepository.findById(productId).map { product ->
-                val newCartItem = cartItem
-                    .copy(
-                        count = cartItem.count,
-                        cart = cart,
-                        product = product
-                    )
-                ResponseEntity.ok().body(cartItemRepository.save(newCartItem))
-            }.orElse(ResponseEntity.notFound().build())
-        }.orElse(ResponseEntity.notFound().build())
+    fun createCartItem(
+        @PathVariable(value = "cart_id") cartId: Long,
+        @PathVariable(value = "product_id") productId: Long,
+        @Valid @RequestBody cartItem: CartItem
+    ): ResponseEntity<Any> {
+        val checkCart = cartRepository.findById(cartId)
+        if (checkCart.isPresent) {
+            val cart = checkCart.get()
+            val checkProduct = productRepository.findById(productId)
+            if (checkProduct.isPresent) {
+                val product = checkProduct.get()
+                val newCartItem = CartItem(
+                    cart = cart,
+                    product = product,
+                    count = cartItem.count
+                )
+                cartItemRepository.save(newCartItem)
+                return ResponseEntity(ResponseMessage(true, "Cart item created successfully"), HttpStatus.CREATED)
+            }
+            return ResponseEntity(ResponseMessage(false, "Product not found"), HttpStatus.BAD_REQUEST)
+        }
+        return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
     }
 
+    @GetMapping("/cart_items")
+    fun getAllCartItems(): List<CartItem> = cartItemRepository.findAll()
+
     @GetMapping("/cart_item/{id}")
-    fun getCartItemById(@PathVariable(value = "id") cartItemId: Long): ResponseEntity<CartItem> {
-        return cartItemRepository.findById(cartItemId).map { cartItem ->
-            ResponseEntity.ok(cartItem)
-        }.orElse(ResponseEntity.notFound().build())
+    fun getCartItemById(@PathVariable(value = "id") cartItemId: Long): ResponseEntity<Any> {
+        val checkCartItem = cartItemRepository.findById(cartItemId)
+        if (checkCartItem.isPresent) {
+            return ResponseEntity(checkCartItem.get(), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Cart item not found"), HttpStatus.BAD_REQUEST)
     }
 
     @PutMapping("/cart_item/{id}")
-    fun updateCartItemById(@PathVariable(value = "id") cartItemId: Long,
-                           @Valid @RequestBody newCartItem: CartItem): ResponseEntity<CartItem> {
-        return cartItemRepository.findById(cartItemId).map { existingCartItem ->
-            val updatedCartItem: CartItem = existingCartItem
-                    .copy(
-                        count = newCartItem.count
-                    )
-            ResponseEntity.ok().body(cartItemRepository.save(updatedCartItem))
-        }.orElse(ResponseEntity.notFound().build())
+    fun updateCartItemById(
+        @PathVariable(value = "id") cartItemId: Long,
+        @Valid @RequestBody newCartItem: CartItem
+    ): ResponseEntity<Any> {
+        val checkCartItem = cartItemRepository.findById(cartItemId)
+        if (checkCartItem.isPresent) {
+            val cartItem = checkCartItem.get().copy(
+                count = newCartItem.count
+            )
+            cartItemRepository.save(cartItem)
+            return ResponseEntity(ResponseMessage(true, "Cart item updated successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Cart item not found"), HttpStatus.BAD_REQUEST)
     }
 
     @DeleteMapping("/cart_item/{id}")
-    fun deleteCartItemById(@PathVariable(value = "id") cartItemId: Long): ResponseEntity<Void> {
-        return cartItemRepository.findById(cartItemId).map { cartItem  ->
-            cartItemRepository.delete(cartItem)
-            ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
+    fun deleteCartItemById(@PathVariable(value = "id") cartItemId: Long): ResponseEntity<Any> {
+        val checkCartItem = cartItemRepository.findById(cartItemId)
+        if (checkCartItem.isPresent) {
+            cartItemRepository.deleteById(cartItemId)
+            return ResponseEntity(ResponseMessage(true, "Cart item deleted successfully"), HttpStatus.OK)
+        }
+        return ResponseEntity(ResponseMessage(false, "Cart item not found"), HttpStatus.BAD_REQUEST)
     }
 }

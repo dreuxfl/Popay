@@ -1,8 +1,8 @@
 package com.tdev.popay.model
 
 import org.hibernate.Hibernate
-import javax.persistence.*
-import javax.validation.constraints.*
+import jakarta.persistence.*
+import jakarta.validation.constraints.*
 
 @Entity
 @Table(name = "cart_item")
