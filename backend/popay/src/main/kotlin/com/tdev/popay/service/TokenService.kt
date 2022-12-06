@@ -1,29 +1,40 @@
 package com.tdev.popay.service
 
 import com.tdev.popay.model.User
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.security.Keys
+import org.springframework.security.oauth2.jwt.JwsHeader
+import org.springframework.security.oauth2.jwt.JwtClaimsSet
+import org.springframework.security.oauth2.jwt.JwtDecoder
+import org.springframework.security.oauth2.jwt.JwtEncoder
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters
 import org.springframework.stereotype.Service
-import java.security.Key
-import java.util.*
+import java.lang.Exception
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 @Service
-class TokenService {
+class TokenService(
+    private val jwtDecoder: JwtDecoder,
+    private val jwtEncoder: JwtEncoder,
+    private val userService: UserService,
+) {
     fun generateToken(user: User): String {
-        val issuer = user.id.toString()
-        val key: Key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
-        return Jwts.builder()
-            .setSubject(user.id.toString())
-            .setIssuer(issuer)
-            .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + 3600000))
-            .signWith(key).compact()
+        val jwsHeader = JwsHeader.with { "HS256" }.build()
+        val claims = JwtClaimsSet.builder()
+            .issuedAt(Instant.now())
+            .expiresAt(Instant.now().plus(30L, ChronoUnit.DAYS))
+            .subject(user.email)
+            .claim("userId", user.id)
+            .build()
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).tokenValue
     }
 
-    fun validateToken(token: String): Boolean {
-        val key: Key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
-        val claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
-        return claims.body.expiration.after(Date())
+    fun verifyToken(token: String): User? {
+        return try {
+            val jwt = jwtDecoder.decode(token)
+            val userId = jwt.claims["userId"] as Long
+            userService.findById(userId)
+        } catch (e: Exception) {
+            null
+        }
     }
 }

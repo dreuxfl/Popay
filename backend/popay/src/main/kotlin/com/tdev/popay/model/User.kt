@@ -3,8 +3,8 @@ package com.tdev.popay.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.Hibernate
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import javax.persistence.*
-import javax.validation.constraints.*
+import jakarta.persistence.*
+import jakarta.validation.constraints.*
 
 @Entity
 @Table(name = "user", uniqueConstraints = [UniqueConstraint(columnNames = ["email"])])
