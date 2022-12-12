@@ -13,7 +13,7 @@ data class CreditHistory(
     val id: Long = 0,
     @get: DecimalMin(value = "0.01", inclusive = false, message = "Amount must be greater than 1")
     val amount: Double = 0.0,
-    val transaction_date: LocalDateTime = LocalDateTime.now(),
+    val transactionDate: LocalDateTime = LocalDateTime.now(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     val user: User? = null,
@@ -34,6 +34,6 @@ data class CreditHistory(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_credit_history = $id , credit = $amount , transaction_date = $transaction_date , user = $user)"
+        return this::class.simpleName + "(id_credit_history = $id , credit = $amount , transaction_date = $transactionDate , user = $user)"
     }
 }
