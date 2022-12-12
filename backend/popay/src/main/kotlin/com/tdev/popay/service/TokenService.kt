@@ -40,7 +40,8 @@ class TokenService(
 
     fun getUserIdFromToken(token: String): Long? {
         return try {
-            val jwt = jwtDecoder.decode(token)
+            val tokenValue = token.substring(7)
+            val jwt = jwtDecoder.decode(tokenValue)
             jwt.claims["userId"] as Long
         } catch (e: Exception) {
             null

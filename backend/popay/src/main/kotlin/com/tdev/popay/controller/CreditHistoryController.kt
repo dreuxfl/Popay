@@ -15,8 +15,8 @@ import jakarta.validation.Valid
 @RestController
 @RequestMapping("/api")
 class CreditHistoryController(
-    private val tokenService: TokenService,
     private val creditHistoryService: CreditHistoryService,
+    private val tokenService: TokenService,
     private val userService: UserService
     ) {
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -31,8 +31,7 @@ class CreditHistoryController(
         @RequestHeader("Authorization") token: String,
         @Valid @RequestBody creditHistory: CreditHistory
     ): ResponseEntity<Any> {
-        val tokenValue = token.substring(7)
-        val userId = tokenService.getUserIdFromToken(tokenValue)
+        val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
@@ -56,8 +55,7 @@ class CreditHistoryController(
     fun getCreditHistories(
         @RequestHeader("Authorization") token: String
     ): ResponseEntity<Any> {
-        val tokenValue = token.substring(7)
-        val userId = tokenService.getUserIdFromToken(tokenValue)
+        val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
@@ -74,13 +72,12 @@ class CreditHistoryController(
         @RequestHeader("Authorization") token: String,
         @PathVariable(value = "id") creditHistoryId: Long
     ): ResponseEntity<Any> {
-        val tokenValue = token.substring(7)
-        val userId = tokenService.getUserIdFromToken(tokenValue)
+        val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
-                val creditHistory = creditHistoryService.findById(creditHistoryId)
-                if (creditHistory != null && creditHistory.user?.id == userId) {
+                val creditHistory = creditHistoryService.findOneByUserId(creditHistoryId, userId)
+                if (creditHistory != null) {
                     return ResponseEntity(creditHistory, HttpStatus.OK)
                 }
                 return ResponseEntity(ResponseMessage(false, "Credit history not found"), HttpStatus.BAD_REQUEST)

@@ -11,9 +11,9 @@ data class Cart(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @get: DecimalMin(value = "1.0", inclusive = false, message = "Amount must be greater than 1")
-    val totalAmount: Double = 0.0,
-    val paymentDate: LocalDateTime = LocalDateTime.now(),
+    @get: DecimalMin(value = "0.1", inclusive = false, message = "Amount must be greater than 1")
+    val totalAmount: Double? = null,
+    val paymentDate: LocalDateTime? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     val user: User? = null,

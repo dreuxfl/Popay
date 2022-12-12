@@ -58,8 +58,7 @@ class UserController(
 
     @GetMapping("/user")
     fun getUser(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
-        val tokenValue = token.substring(7)
-        val userId = tokenService.getUserIdFromToken(tokenValue)
+        val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
@@ -74,8 +73,7 @@ class UserController(
         @RequestHeader("Authorization") token: String,
         @Valid @RequestBody updatedUser: User
     ): ResponseEntity<Any> {
-        val tokenValue = token.substring(7)
-        val userId = tokenService.getUserIdFromToken(tokenValue)
+        val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
@@ -96,8 +94,7 @@ class UserController(
 
     @DeleteMapping("/user")
     fun deleteUserById(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
-        val tokenValue = token.substring(7)
-        val userId = tokenService.getUserIdFromToken(tokenValue)
+        val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
