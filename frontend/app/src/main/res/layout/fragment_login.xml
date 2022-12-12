@@ -15,11 +15,10 @@
         android:id="@+id/imageView2"
         android:layout_width="325dp"
         android:layout_height="425dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="0dp"
         android:contentDescription="@string/popay_logo_description"
         android:src="@drawable/logo_popay"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -13,17 +13,27 @@
 
     <string name="prompt_first_name">First name</string>
     <string name="prompt_last_name">Last name</string>
+    <string name="prompt_full_name">Full name</string>
 
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="welcome">"Welcome!"</string>
-    <string name="invalid_first_name">First name is required</string>
-    <string name="invalid_last_name">First name is required</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_email">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+
+    <!-- Errors -->
+    <string name="error_email_required">E-mail address is required</string>
+    <string name="error_email_invalid">Invalid e-mail address</string>
+    <string name="error_full_name_required">Full name is required</string>
+    <string name="error_full_name_invalid">Full name must be 2 words</string>
+
+    <string name="error_first_name_required">First name is required</string>
+    <string name="error_last_name_required">Last name is required</string>
+    <string name="error_password_required">Password name is required</string>
+    <string name="error_password_invalid">Password must be 8 or more characters long</string>
+    <string name="error_password1_required">Password confirmation is required</string>
+    <string name="error_passwords_mismatch">Passwords must be the same</string>
+
     <string name="login_failed">"Login failed"</string>
     <string name="register_failed">"Register failed"</string>
 
