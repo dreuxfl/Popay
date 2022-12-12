@@ -37,4 +37,13 @@ class TokenService(
             null
         }
     }
+
+    fun getUserIdFromToken(token: String): Long? {
+        return try {
+            val jwt = jwtDecoder.decode(token)
+            jwt.claims["userId"] as Long
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
