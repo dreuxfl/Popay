@@ -1,24 +1,30 @@
 package com.popay
 
-import com.popay.databinding.QrcodeScannerBinding
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.io.IOException
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
+import com.google.android.gms.vision.Detector.Detections
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import com.google.android.gms.vision.Detector.Detections
+import com.popay.databinding.QrcodeScannerBinding
+import java.io.IOException
+
+
 
 class QRCodeScannerActivity : AppCompatActivity() {
+
     private val requestCodeCameraPermission = 1001
     private lateinit var cameraSource: CameraSource
     private lateinit var barcodeDetector: BarcodeDetector
@@ -40,6 +46,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
             setupControls()
         }
 
+
         val aniSlide: Animation =
             AnimationUtils.loadAnimation(this@QRCodeScannerActivity, R.anim.scanner_animation)
         binding.barcodeLine.startAnimation(aniSlide)
@@ -55,7 +62,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
             .setAutoFocusEnabled(true)
             .build()
 
-        binding.cameraSurfaceView.getHolder().addCallback(object : SurfaceHolder.Callback {
+        binding.cameraSurfaceView.holder.addCallback(object : SurfaceHolder.Callback {
             @SuppressLint("MissingPermission")
             override fun surfaceCreated(holder: SurfaceHolder) {
                 try {
@@ -92,14 +99,36 @@ class QRCodeScannerActivity : AppCompatActivity() {
             }
 
             override fun receiveDetections(detections: Detections<Barcode>) {
+
                 val barcodes = detections.detectedItems
                 if (barcodes.size() == 1) {
                     scannedValue = barcodes.valueAt(0).rawValue
 
+
                     runOnUiThread {
                         cameraSource.stop()
-                        Toast.makeText(this@QRCodeScannerActivity, "value- $scannedValue", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@QRCodeScannerActivity, "value: $scannedValue", Toast.LENGTH_SHORT).show()
                         finish()
+                        val queue = Volley.newRequestQueue(this@QRCodeScannerActivity)
+                        val jsonObjectRequest = JsonObjectRequest(
+                            "http://10.136.76.77:8080/api/product/$scannedValue",
+                            null,
+                            { response ->
+                                val intent = Intent(this@QRCodeScannerActivity, ProductPopup::class.java)
+                                intent.putExtra("popupName", response.getString("caption"))
+                                intent.putExtra("popupDesc", response.getString("description"))
+                                intent.putExtra("popupPrice", response.getString("price"))
+                                intent.putExtra("darkstatusbar",false)
+                                startActivity(intent)
+                            },
+                            { error ->
+                                println("Err $error")
+                            }
+                        )
+                        queue.add(jsonObjectRequest)
+
+
+
                     }
                 }else
                 {

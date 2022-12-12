@@ -42,4 +42,6 @@
     <string name="scan_btn_text">Scan QR code</string>
     <string name="nfc_btn_text">Scan nfc</string>
     <string name="prompt_confirm_password">Confirm password</string>
+    <string name="ajouter_au_panier">Ajouter au panier</string>
+    <string name="produit_scann">Produit scanné</string>
 </resources>

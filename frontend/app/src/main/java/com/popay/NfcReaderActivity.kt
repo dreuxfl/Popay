@@ -15,6 +15,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+
 class NfcReaderActivity : AppCompatActivity()
 {
 
@@ -46,24 +47,24 @@ class NfcReaderActivity : AppCompatActivity()
             finish()
             return
         }
-
     }
 
 
-    override fun onNewIntent(intent: Intent?)
-    {
+    override fun onNewIntent(intent: Intent) {
+
         super.onNewIntent(intent)
-        Toast.makeText(this, "NEW INTENT", Toast.LENGTH_LONG).show()
-        var tagFromIntent: Tag? = intent?.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        val tagFromIntent = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
 
-        val nfc = NfcA.get(tagFromIntent)
+        val nfcA = NfcA.get(tagFromIntent)
 
-        val atqa: ByteArray = nfc.atqa
-        val sak: Short = nfc.sak
-        nfc.connect()
+        nfcA.connect()
 
-        if(nfc.isConnected)
-        {
+        if (nfcA.isConnected) {
+            //val data = nfcA.transceive(NFC_READ_COMMAND)
+            nfcA.close()
+            val uid = tagFromIntent?.id
+            val uidString = uid?.joinToString("") { "%02X".format(it) }
+            println("HELLOOOOO  $uidString")
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (vibrator.hasVibrator()) {
                 vibrator.vibrate(
@@ -73,19 +74,19 @@ class NfcReaderActivity : AppCompatActivity()
                     )
                 )
             }
-                val receivedData:ByteArray= nfc.transceive(NFC_READ_COMMAND)
-            Toast.makeText(this@NfcReaderActivity, "NFC READ", Toast.LENGTH_SHORT).show()
-
-        } else{
-    Log.e("ans", "Not connected")
-            }
+        } else {
+            Log.e("ans", "Not connected")
+        }
     }
 
-    private fun enableForegroundDispatch(activity: AppCompatActivity, adapter: NfcAdapter?) {
-
-        val intent = Intent(activity.applicationContext, activity.javaClass)
+    private fun enableForegroundDispatched(activity: AppCompatActivity, adapter: NfcAdapter) {
+        val intent = Intent(this, this.javaClass)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        val pendingIntent = PendingIntent.getActivity(activity.applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(activity.applicationContext, 0, intent, PendingIntent.FLAG_MUTABLE)
+        } else {
+            PendingIntent.getActivity(activity.applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        }
         val filters = arrayOfNulls<IntentFilter>(1)
         val techList = arrayOf<Array<String>>()
         filters[0] = IntentFilter()
@@ -95,15 +96,15 @@ class NfcReaderActivity : AppCompatActivity()
             try {
                 this?.addDataType("text/plain")
             } catch (ex: IntentFilter.MalformedMimeTypeException) {
-                throw RuntimeException("err")
+                throw RuntimeException(ex)
             }
         }
-        adapter?.enableForegroundDispatch(activity, pendingIntent, filters, techList)
-
+        adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList)
     }
     override fun onResume() {
         super.onResume()
-        enableForegroundDispatch(this, this.nfcAdapter)
-
+        val intent = Intent()
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        enableForegroundDispatched(this, nfcAdapter!!)
     }
 }
