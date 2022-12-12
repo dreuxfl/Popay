@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main.xml"
+    app:startDestination="@id/homeFragment">
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.popay.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.popay.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.popay.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/creditFragment"
+        android:name="com.popay.CreditFragment"
+        android:label="fragment_credit"
+        tools:layout="@layout/fragment_credit" />
+    <activity
+        android:id="@+id/QRCodeScannerActivity"
+        android:name="com.popay.QRCodeScannerActivity"
+        android:label="qrcode_scanner"
+        tools:layout="@layout/qrcode_scanner" />
+</navigation>

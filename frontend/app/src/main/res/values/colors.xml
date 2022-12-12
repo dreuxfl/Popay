@@ -12,4 +12,10 @@
     <color name="green2">#36ec03</color>
     <color name="green3">#469536</color>
 
+    <color name="onyx">#454545</color>
+    <color name="granite">#666666</color>
+    <color name="gold">#DCB92E</color>
+    <color name="cyber_yellow">#FFD323</color>
+
+
 </resources>
