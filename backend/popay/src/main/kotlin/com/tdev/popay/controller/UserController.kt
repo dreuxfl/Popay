@@ -31,8 +31,8 @@ class UserController(
     fun registerUser(@Valid @RequestBody newUser: User): ResponseEntity<Any> {
         if (!userService.existsByEmail(newUser.email)) {
             val user = User(
-                first_name = newUser.first_name,
-                last_name = newUser.last_name,
+                firstName = newUser.firstName,
+                lastName = newUser.lastName,
                 email = newUser.email,
                 password = hashService.hashBcrypt(newUser.password),
                 wallet = newUser.wallet
@@ -80,8 +80,8 @@ class UserController(
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
                 val user = checkUser.copy(
-                    first_name = updatedUser.first_name,
-                    last_name = updatedUser.last_name,
+                    firstName = updatedUser.firstName,
+                    lastName = updatedUser.lastName,
                     email = updatedUser.email,
                     password = hashService.hashBcrypt(updatedUser.password),
                     wallet = updatedUser.wallet

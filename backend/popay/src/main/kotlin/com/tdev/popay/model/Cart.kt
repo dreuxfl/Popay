@@ -12,8 +12,8 @@ data class Cart(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     @get: DecimalMin(value = "1.0", inclusive = false, message = "Amount must be greater than 1")
-    val total_amount: Double = 0.0,
-    val payment_date: LocalDateTime = LocalDateTime.now(),
+    val totalAmount: Double = 0.0,
+    val paymentDate: LocalDateTime = LocalDateTime.now(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     val user: User? = null,
@@ -34,6 +34,6 @@ data class Cart(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_cart = $id , total_amount = $total_amount , payment_date = $payment_date , user = $user)"
+        return this::class.simpleName + "(id_cart = $id , total_amount = $totalAmount , payment_date = $paymentDate , user = $user)"
     }
 }

@@ -13,9 +13,9 @@ data class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     @get: NotBlank(message = "First name is mandatory")
-    val first_name: String = "",
+    val firstName: String = "",
     @get: NotBlank(message = "Last name is mandatory")
-    val last_name: String = "",
+    val lastName: String = "",
     @get: NotBlank(message = "Email is mandatory")
     @get: Email(message = "Email should be valid")
     val email: String = "",
@@ -45,6 +45,6 @@ data class User(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_user = $id, first_name = $first_name, last_name = $last_name, email = $email, wallet = $wallet)"
+        return this::class.simpleName + "(id_user = $id, first_name = $firstName, last_name = $lastName, email = $email, wallet = $wallet)"
     }
 }

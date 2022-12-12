@@ -34,7 +34,7 @@ class CartController(
             val user = checkUser.get()
             val newCart = Cart(
                 user = user,
-                total_amount = cart.total_amount
+                totalAmount = cart.totalAmount
             )
             cartRepository.save(newCart)
             return ResponseEntity(ResponseMessage(true, "Cart created successfully"), HttpStatus.CREATED)
@@ -62,7 +62,7 @@ class CartController(
         val checkCart = cartRepository.findById(cartId)
         if (checkCart.isPresent) {
             val cart = checkCart.get().copy(
-                total_amount = newCart.total_amount
+                totalAmount = newCart.totalAmount
             )
             cartRepository.save(cart)
             return ResponseEntity(ResponseMessage(true, "Cart updated successfully"), HttpStatus.OK)
