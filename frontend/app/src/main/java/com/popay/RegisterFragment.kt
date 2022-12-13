@@ -1,23 +1,23 @@
 package com.popay
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.doOnDetach
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.popay.databinding.FragmentRegisterBinding
-import java.io.Console
-import java.io.StringReader
 
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
+    private val baseUrl = "http://10.136.0.1:8080/api"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,7 +27,7 @@ class RegisterFragment : Fragment() {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.registerEmail.doOnTextChanged { _, _, _, _ ->
-            val regex = Regex("/\\s+@\\s+.\\s/g")
+            val regex = "[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\\.[a-zA-Z.]{2,18}".toRegex()
             binding.registerEmailLayout.error = if(binding.registerEmail.text!!.isEmpty()){
                 getString(R.string.error_email_required)
             }else if(!regex.matches(binding.registerEmail.text.toString())){
@@ -66,12 +66,26 @@ class RegisterFragment : Fragment() {
                 binding.registerPasswordLayout.error.isNullOrEmpty() &&
                 binding.registerPassword1Layout.error.isNullOrEmpty() &&
                 binding.registerFullNameLayout.error.isNullOrEmpty()
-            ) { //if no error
+
+            ) { //if no error send request
+                val queue = Volley.newRequestQueue(context)
+                val stringRequest = JsonObjectRequest(
+                    Request.Method.POST,
+                    "$baseUrl/user",
+                    null,
+                    { response ->
+                        println(response.toString())
+                        Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                    },
+                    {
+                        println(it.toString())
+                        Toast.makeText(context, it!!.message , Toast.LENGTH_LONG).show()
+                    }
+                )
+                queue.add(stringRequest)
 
             } else {
-                val errorToast = Toast.makeText(context, "Register failed", Toast.LENGTH_LONG)
-                errorToast.setGravity(Gravity.BOTTOM, 50, 50)
-                errorToast.show()
+                Toast.makeText(context, "Register failed", Toast.LENGTH_LONG).show()
             }
         }
         return binding.root
