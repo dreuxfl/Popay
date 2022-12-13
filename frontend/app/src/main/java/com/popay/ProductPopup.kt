@@ -20,18 +20,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
+import com.popay.entities.Product
 
 class ProductPopup: AppCompatActivity() {
 
-    private var popupName = ""
+
     private var popupText = ""
-    private var popupDesc = ""
-    private var popupQuantite = 1
-    private var popupPrice = ""
     private var popupBtnPlus = ""
     private var popupBtnMoins = ""
     private var popupButton = ""
     private var darkStatusBar = false
+    private var popUpproduct: Product? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,34 +48,33 @@ class ProductPopup: AppCompatActivity() {
         val viewBackground = findViewById<ConstraintLayout>(R.id.popup_window_background)
 
         val bundle = intent.extras
-        popupName = bundle?.getString("popupName", "Name") ?: ""
-        popupDesc = bundle?.getString("popupDesc", "Description") ?: ""
-        popupPrice = bundle?.getString("popupPrice", "0") ?: ""
-        darkStatusBar = bundle?.getBoolean("darkstatusbar", false) ?: false
+        if (bundle != null) {
+            popUpproduct = bundle.getSerializable("product") as Product
+        }
 
         plus.setOnClickListener{
-            popupQuantite += 1
-            popupText = popupQuantite.toString()
-            val newPrice = popupPrice.toDouble() * popupQuantite
+            popUpproduct!!.quantity++
+            popupText = popUpproduct!!.quantity.toString()
+            val newPrice = popUpproduct!!.price * popUpproduct!!.quantity
             quantite.setText(popupText)
-            price.text = newPrice.toString()
+            price.text = newPrice.toString() + " €"
         }
 
 
         moins.setOnClickListener{
-            if(popupQuantite > 1){
-                popupQuantite -= 1
-                popupText = popupQuantite.toString()
-                val newPrice = popupPrice.toDouble() * popupQuantite
+            if(popUpproduct!!.quantity > 1){
+                popUpproduct!!.quantity -= 1
+                popupText = popUpproduct!!.quantity.toString()
+                val newPrice = popUpproduct!!.price * popUpproduct!!.quantity
                 quantite.setText(popupText)
-                price.text = newPrice.toString()
+                price.text = newPrice.toString() + " €"
             }
         }
 
-        productName.text = popupName
-        quantite.setText(popupQuantite.toString())
-        description.text = popupDesc
-        price.text = popupPrice
+        productName.text = popUpproduct!!.name
+        quantite.setText(popUpproduct!!.quantity.toString())
+        description.text = popUpproduct!!.description
+        price.text = popUpproduct!!.price.toString() + " €"
 
         confirmBtn.setOnClickListener{
             onBackPressed()
@@ -85,7 +83,7 @@ class ProductPopup: AppCompatActivity() {
         if (Build.VERSION.SDK_INT in 19..20) {
             setWindowFlag(this, true)
         }
-        val alpha = 100 //between 0-255
+        val alpha = 100
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), Color.TRANSPARENT, alphaColor)
         colorAnimation.duration = 500 // milliseconds
@@ -130,7 +128,6 @@ class ProductPopup: AppCompatActivity() {
             DecelerateInterpolator()
         ).start()
 
-        // After animation finish, close the Activity
         colorAnimation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 finish()
