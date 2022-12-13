@@ -19,6 +19,7 @@ import com.google.android.gms.vision.Detector.Detections
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.popay.databinding.QrcodeScannerBinding
+import com.popay.entities.Product
 import java.io.IOException
 
 
@@ -114,11 +115,14 @@ class QRCodeScannerActivity : AppCompatActivity() {
                             "http://10.136.76.77:8080/api/product/$scannedValue",
                             null,
                             { response ->
+                                val product = Product(
+                                    response.getString("id").toInt(),
+                                    response.getString("caption"),
+                                    response.getString("price").toDouble(),
+                                    response.getString("description")
+                                )
                                 val intent = Intent(this@QRCodeScannerActivity, ProductPopup::class.java)
-                                intent.putExtra("popupName", response.getString("caption"))
-                                intent.putExtra("popupDesc", response.getString("description"))
-                                intent.putExtra("popupPrice", response.getString("price"))
-                                intent.putExtra("darkstatusbar",false)
+                                intent.putExtra("product", product)
                                 startActivity(intent)
                             },
                             { error ->
@@ -126,8 +130,6 @@ class QRCodeScannerActivity : AppCompatActivity() {
                             }
                         )
                         queue.add(jsonObjectRequest)
-
-
 
                     }
                 }else
