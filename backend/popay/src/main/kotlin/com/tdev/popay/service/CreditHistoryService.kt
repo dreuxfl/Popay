@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreditHistoryService(
-    private val creditHistoryRepository: CreditHistoryRepository,
+    private val creditHistoryRepository: CreditHistoryRepository
 ) {
     fun findAllByUserId(userId: Long): List<CreditHistory> {
         val creditHistories = creditHistoryRepository.findAll()

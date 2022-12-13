@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit
 class TokenService(
     private val jwtDecoder: JwtDecoder,
     private val jwtEncoder: JwtEncoder,
-    private val userService: UserService,
+    private val userService: UserService
 ) {
     fun generateToken(user: User): String {
         val jwsHeader = JwsHeader.with { "HS256" }.build()

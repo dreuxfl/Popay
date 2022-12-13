@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CartService(
-    private val cartRepository: CartRepository,
+    private val cartRepository: CartRepository
 ) {
     fun findCurrentCartByUserId(userId: Long): Cart? {
         val carts = cartRepository.findAll()
