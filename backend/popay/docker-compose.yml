@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+    popay-backend:
+        image: popay-backend
+        container_name: popay-backend
+        build: .
+        ports:
+            - "8080:8080"
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev
+        depends_on:
+            - popay-db
+        restart: always
+        stdin_open: true
+        tty: true
+
+    popay-db:
+        image: mysql:8.0
+        container_name: popay-db
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_USER=root
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=popay
+        volumes:
+            - data:/var/lib/mysql
+        restart: always
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        restart: always
+        depends_on:
+            - popay-db
+        ports:
+            - "8000:80"
+        environment:
+            PMA_HOST: popay-db
+            PMA_PORT: 3306
+            PMA_USER: root
+            PMA_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
+
+volumes:
+    data:
