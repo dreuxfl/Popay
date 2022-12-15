@@ -13,6 +13,11 @@ class CartItemService(
         return cartItems.filter { it.cart?.id == id }
     }
 
+    fun findByCartIdAndProductId(cartId: Long, productId: Long): CartItem? {
+        val cartItems = cartItemRepository.findAll()
+        return cartItems.find { it.cart?.id == cartId && it.product?.id == productId }
+    }
+
     fun save(cartItem: CartItem): CartItem {
         return cartItemRepository.save(cartItem)
     }

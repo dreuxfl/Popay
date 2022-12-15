@@ -2,6 +2,7 @@ package com.tdev.popay.controller
 
 import com.tdev.popay.dto.ResponseMessage
 import com.tdev.popay.model.Cart
+import com.tdev.popay.service.CartItemService
 import com.tdev.popay.service.CartService
 import com.tdev.popay.service.TokenService
 import com.tdev.popay.service.UserService
@@ -16,6 +17,7 @@ import jakarta.validation.Valid
 @RequestMapping("/api")
 class CartController(
     private val cartService: CartService,
+    private val cartItemService: CartItemService,
     private val tokenService: TokenService,
     private val userService: UserService
     ) {
@@ -52,8 +54,14 @@ class CartController(
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
-                val creditHistories = cartService.findCurrentCartByUserId(userId)
-                return ResponseEntity(creditHistories, HttpStatus.OK)
+                val cart = cartService.findCurrentCartByUserId(userId)
+                if (cart != null) {
+                    val cartItems = cartItemService.findAllByCartId(cart.id)
+                    for (cartItem in cartItems) {
+                        cart.totalAmount = cart.totalAmount.plus((cartItem.product?.price ?: 0.0) * cartItem.count)
+                    }
+                }
+                return ResponseEntity(cart, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
         }
@@ -66,8 +74,14 @@ class CartController(
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
-                val creditHistories = cartService.findAllPayedCartsByUserId(userId)
-                return ResponseEntity(creditHistories, HttpStatus.OK)
+                val carts = cartService.findAllPayedCartsByUserId(userId)
+                for (cart in carts) {
+                    val cartItems = cartItemService.findAllByCartId(cart.id)
+                    for (cartItem in cartItems) {
+                        cart.totalAmount = cart.totalAmount.plus((cartItem.product?.price ?: 0.0) * cartItem.count)
+                    }
+                }
+                return ResponseEntity(carts, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
         }
@@ -83,8 +97,14 @@ class CartController(
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
-                val creditHistories = cartService.findOnePayedCartsByUserId(id, userId)
-                return ResponseEntity(creditHistories, HttpStatus.OK)
+                val cart = cartService.findOnePayedCartsByUserId(id, userId)
+                if (cart != null) {
+                    val cartItems = cartItemService.findAllByCartId(cart.id)
+                    for (cartItem in cartItems) {
+                        cart.totalAmount = cart.totalAmount.plus((cartItem.product?.price ?: 0.0) * cartItem.count)
+                    }
+                }
+                return ResponseEntity(cart, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
         }

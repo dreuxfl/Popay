@@ -11,13 +11,13 @@ data class CartItem(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     @get: Min(value = 1, message = "Count must be greater than 0")
-    val count: Int = 0,
+    var count: Int = 0,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart")
-    val cart: Cart? = null,
+    val cart: Cart?,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product")
-    val product: Product? = null,
+    val product: Product?,
 ) {
    override fun equals(other: Any?): Boolean {
        if (this === other) {

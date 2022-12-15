@@ -2,7 +2,6 @@ package com.tdev.popay.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.Hibernate
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
 
@@ -25,10 +24,6 @@ data class User(
     val password: String = "",
     val wallet: Double? = 0.0,
 ) {
-    fun comparePassword(password: String): Boolean {
-        return BCryptPasswordEncoder().matches(password, this.password)
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true

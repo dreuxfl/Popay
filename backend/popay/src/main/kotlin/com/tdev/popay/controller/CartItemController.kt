@@ -40,18 +40,20 @@ class CartItemController(
             if (checkCart != null) {
                 val checkProduct = productService.findById(productId)
                 if (checkProduct != null) {
-                    val newCartItem = CartItem(
-                        cart = checkCart,
-                        product = checkProduct,
-                        count = cartItem.count
-                    )
-                    cartItemService.save(newCartItem)
-                    val cartTotalAmount = checkProduct.price.times(cartItem.count)
-                    val updatedCart = checkCart.copy(
-                        totalAmount = cartTotalAmount
-                    )
-                    cartService.save(updatedCart)
-                    return ResponseEntity(ResponseMessage(true, "Cart item created successfully"), HttpStatus.CREATED)
+                    val checkCartItem = cartItemService.findByCartIdAndProductId(checkCart.id, productId)
+                    if (checkCartItem != null) {
+                        checkCartItem.count = checkCartItem.count + cartItem.count
+                        cartItemService.save(checkCartItem)
+                        return ResponseEntity(ResponseMessage(true, "Cart item updated successfully"), HttpStatus.CREATED)
+                    } else {
+                        val newCartItem = CartItem(
+                            cart = checkCart,
+                            product = checkProduct,
+                            count = cartItem.count
+                        )
+                        cartItemService.save(newCartItem)
+                        return ResponseEntity(ResponseMessage(true, "Cart item created successfully"), HttpStatus.CREATED)
+                    }
                 }
                 return ResponseEntity(ResponseMessage(false, "Product not found"), HttpStatus.BAD_REQUEST)
             }

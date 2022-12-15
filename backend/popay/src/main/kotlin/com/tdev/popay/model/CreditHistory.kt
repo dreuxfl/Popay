@@ -16,7 +16,7 @@ data class CreditHistory(
     val transactionDate: LocalDateTime = LocalDateTime.now(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
-    val user: User? = null,
+    val user: User?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) {
