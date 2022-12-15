@@ -31,8 +31,8 @@ class UserController(
     fun registerUser(@Valid @RequestBody newUser: User): ResponseEntity<Any> {
         if (!userService.existsByEmail(newUser.email)) {
             val user = User(
-                first_name = newUser.first_name,
-                last_name = newUser.last_name,
+                firstName = newUser.firstName,
+                lastName = newUser.lastName,
                 email = newUser.email,
                 password = hashService.hashBcrypt(newUser.password),
                 wallet = newUser.wallet
@@ -56,44 +56,52 @@ class UserController(
         return ResponseEntity(ResponseMessage(false, "Invalid credentials"), HttpStatus.BAD_REQUEST)
     }
 
-    @GetMapping("/users")
-    fun getAllUsers(): List<User> = userService.findAll()
-
-    @GetMapping("/user/{id}")
-    fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<Any> {
-        val checkUser = userService.findById(userId)
-        if (checkUser != null) {
-            return ResponseEntity(checkUser, HttpStatus.OK)
+    @GetMapping("/user")
+    fun getUser(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
+        val userId = tokenService.getUserIdFromToken(token)
+        if (userId != null) {
+            val checkUser = userService.findById(userId)
+            if (checkUser != null) {
+                return ResponseEntity(checkUser, HttpStatus.OK)
+            }
         }
         return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/user")
     fun updateUserById(
-        @PathVariable(value = "id") userId: Long,
+        @RequestHeader("Authorization") token: String,
         @Valid @RequestBody updatedUser: User
     ): ResponseEntity<Any> {
-        val checkUser = userService.findById(userId)
-        if (checkUser != null) {
-            val user = checkUser.copy(
-                first_name = updatedUser.first_name,
-                last_name = updatedUser.last_name,
-                email = updatedUser.email,
-                password = hashService.hashBcrypt(updatedUser.password),
-                wallet = updatedUser.wallet
-            )
-            userService.save(user)
-            return ResponseEntity(ResponseMessage(true, "User updated successfully"), HttpStatus.OK)
+        val userId = tokenService.getUserIdFromToken(token)
+        if (userId != null) {
+            val checkUser = userService.findById(userId)
+            if (checkUser != null) {
+                val user = checkUser.copy(
+                    firstName = updatedUser.firstName,
+                    lastName = updatedUser.lastName,
+                    email = updatedUser.email,
+                    password = hashService.hashBcrypt(updatedUser.password),
+                    wallet = updatedUser.wallet
+                )
+                userService.save(user)
+                return ResponseEntity(ResponseMessage(true, "User updated successfully"), HttpStatus.OK)
+            }
+            return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
         }
         return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
     }
 
-    @DeleteMapping("/user/{id}")
-    fun removeUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<Any> {
-        val checkUser = userService.findById(userId)
-        if (checkUser != null) {
-            userService.deleteById(userId)
-            return ResponseEntity(ResponseMessage(true, "User deleted successfully"), HttpStatus.OK)
+    @DeleteMapping("/user")
+    fun deleteUserById(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
+        val userId = tokenService.getUserIdFromToken(token)
+        if (userId != null) {
+            val checkUser = userService.findById(userId)
+            if (checkUser != null) {
+                userService.deleteById(userId)
+                return ResponseEntity(ResponseMessage(true, "User deleted successfully"), HttpStatus.OK)
+            }
+            return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
         }
         return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
     }
