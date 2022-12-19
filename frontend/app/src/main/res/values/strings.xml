@@ -44,4 +44,5 @@
     <string name="prompt_confirm_password">Confirm password</string>
     <string name="ajouter_au_panier">Ajouter au panier</string>
     <string name="produit_scann">Produit scanné</string>
+    <string name="profile">Profile</string>
 </resources>
