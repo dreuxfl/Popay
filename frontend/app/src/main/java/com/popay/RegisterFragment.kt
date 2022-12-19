@@ -1,5 +1,7 @@
 package com.popay
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +13,20 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.popay.databinding.FragmentRegisterBinding
+import org.json.JSONObject
 
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val baseUrl = "http://10.136.0.1:8080/api"
+    private val baseUrl = "http://10.136.76.77:8080/api"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        // Inflate the layout for this fragment
+
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.registerEmail.doOnTextChanged { _, _, _, _ ->
@@ -69,17 +72,54 @@ class RegisterFragment : Fragment() {
 
             ) { //if no error send request
                 val queue = Volley.newRequestQueue(context)
+                val params = HashMap<String, String>()
+                params["email"] = binding.registerEmail.text.toString()
+                params["password"] = binding.registerPassword.text.toString()
+                params["first_name"] = binding.registerFullName.text.toString().split(" ")[0]
+                params["last_name"] = binding.registerFullName.text.toString().split(" ")[1]
+                val jsonObject = JSONObject(params as Map<*, *>)
                 val stringRequest = JsonObjectRequest(
                     Request.Method.POST,
-                    "$baseUrl/user",
-                    null,
+                    "$baseUrl/register",
+                    jsonObject,
                     { response ->
-                        println(response.toString())
-                        Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                        if(response.getBoolean("success")){
+                            Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
+                            val params1 = HashMap<String, String>()
+                            params1["email"] = binding.registerEmail.text.toString()
+                            params1["password"] = binding.registerPassword.text.toString()
+                            val jsonObject1 = JSONObject(params1 as Map<*, *>)
+                            val stringRequest = JsonObjectRequest(
+                                Request.Method.POST,
+                                "$baseUrl/login",
+                                jsonObject1,
+                                { resp ->
+                                    if(resp.has("token")){
+                                        Toast.makeText(context, "Welcome", Toast.LENGTH_LONG).show()
+                                        activity?.startActivity(Intent (activity, MainActivity::class.java))
+                                        val sharedPref = activity?.getSharedPreferences("Authentication",
+                                            Context.MODE_PRIVATE) ?: return@JsonObjectRequest
+                                        with (sharedPref.edit()) {
+                                            putString("token", resp.getString("token"))
+                                            apply()
+                                        }
+                                        this.activity?.finish()
+                                    }else{
+                                        Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show()
+                                    }
+                                },
+                                {
+                                    println("ERRR ${it.toString()}")
+                                }
+                            )
+                            queue.add(stringRequest)
+                        } else {
+                            Toast.makeText(context, response.getString("message"), Toast.LENGTH_SHORT).show()
+                        }
                     },
                     {
-                        println(it.toString())
-                        Toast.makeText(context, it!!.message , Toast.LENGTH_LONG).show()
+                        println("ERRR ${it.toString()}")
+
                     }
                 )
                 queue.add(stringRequest)

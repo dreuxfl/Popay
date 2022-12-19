@@ -3,14 +3,9 @@
 
 
     <item
-        android:id="@+id/loginFragment"
+        android:id="@+id/ProfileFragment"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="@string/menu_login"
-        />
-    <item
-        android:id="@+id/registerFragment"
-        android:icon="@drawable/ic_baseline_person_24"
-        android:title="@string/menu_register"
+        android:title="@string/profile"
         />
     <item
         android:id="@+id/homeFragment"

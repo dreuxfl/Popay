@@ -10,14 +10,14 @@ data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @get: DecimalMin(value = "0.01", inclusive = false, message = "Price must be greater than 1")
+    @get: DecimalMin(value = "0.01", inclusive = false, message = "Price must be greater than 0.01")
     val price: Double = 0.0,
     @get: NotBlank(message = "Caption is mandatory")
     val caption: String = "",
     @get: NotBlank(message = "Description is mandatory")
     val description: String = "",
     @get: Min(value = 1, message = "Quantity must be greater than 0")
-    val quantity: Int = 0,
+    val stock: Int = 0,
 ) {
    override fun equals(other: Any?): Boolean {
        if (this === other) {
@@ -35,6 +35,6 @@ data class Product(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_product = $id , price = $price , caption = $caption , description = $description , quantity = $quantity)"
+        return this::class.simpleName + "(id_product = $id , price = $price , caption = $caption , description = $description , stock = $stock)"
     }
 }
