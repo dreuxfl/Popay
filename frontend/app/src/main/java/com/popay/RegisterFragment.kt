@@ -1,5 +1,7 @@
 package com.popay
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -81,8 +83,39 @@ class RegisterFragment : Fragment() {
                     "$baseUrl/register",
                     jsonObject,
                     { response ->
-                        println(response.toString())
-                        Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                        if(response.getBoolean("success")){
+                            Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
+                            val params1 = HashMap<String, String>()
+                            params1["email"] = binding.registerEmail.text.toString()
+                            params1["password"] = binding.registerPassword.text.toString()
+                            val jsonObject1 = JSONObject(params1 as Map<*, *>)
+                            val stringRequest = JsonObjectRequest(
+                                Request.Method.POST,
+                                "$baseUrl/login",
+                                jsonObject1,
+                                { resp ->
+                                    if(resp.has("token")){
+                                        Toast.makeText(context, "Welcome", Toast.LENGTH_LONG).show()
+                                        activity?.startActivity(Intent (activity, MainActivity::class.java))
+                                        val sharedPref = activity?.getSharedPreferences("Authentication",
+                                            Context.MODE_PRIVATE) ?: return@JsonObjectRequest
+                                        with (sharedPref.edit()) {
+                                            putString("token", resp.getString("token"))
+                                            apply()
+                                        }
+                                        this.activity?.finish()
+                                    }else{
+                                        Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show()
+                                    }
+                                },
+                                {
+                                    println("ERRR ${it.toString()}")
+                                }
+                            )
+                            queue.add(stringRequest)
+                        } else {
+                            Toast.makeText(context, response.getString("message"), Toast.LENGTH_SHORT).show()
+                        }
                     },
                     {
                         println("ERRR ${it.toString()}")

@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.auth0.android.jwt.JWT
 
 import com.popay.databinding.FragmentLoginBinding
+import com.popay.entities.User
 import org.json.JSONObject
 
 class LoginFragment : Fragment() {
@@ -70,13 +72,28 @@ class LoginFragment : Fragment() {
                     "$baseUrl/login",
                     jsonObject,
                     { response ->
-                        Toast.makeText(context, "Welcome", Toast.LENGTH_LONG).show()
-                        val intent = Intent (activity, MainActivity::class.java)
-                        activity?.startActivity(intent)
-                        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@JsonObjectRequest
-                        with (sharedPref.edit()) {
-                            putInt("token", response.getInt("token"))
-                            apply()
+                        if(response.has("token")){
+                            val jwt = JWT(response.getString("token"))
+                            val fullName = jwt.getClaim("firstName").asString() + " " + jwt.getClaim("lastName").asString()
+                            val userId = jwt.getClaim("userId").asInt()
+
+                            val user = userId?.let { it1 -> User(it1, fullName, email) }
+
+                            Toast.makeText(context, "Welcome", Toast.LENGTH_LONG).show()
+
+                            val intent = Intent(activity, MainActivity::class.java)
+                            intent.putExtra("user", user)
+                            startActivity(intent)
+
+
+                            val sharedPref = activity?.getSharedPreferences("Authentication",Context.MODE_PRIVATE) ?: return@JsonObjectRequest
+                            with (sharedPref.edit()) {
+                                putString("token", response.getString("token"))
+                                apply()
+                            }
+                            this.activity?.finish()
+                        }else{
+                            Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show()
                         }
                     },
                     {

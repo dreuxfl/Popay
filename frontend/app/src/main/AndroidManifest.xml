@@ -26,7 +26,8 @@
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -53,7 +54,8 @@
         <activity
             android:name=".AuthActivity"
             android:exported="true"
-            android:theme="@style/Theme.PoPay.NoActionBar">
+            android:theme="@style/Theme.PoPay.NoActionBar"
+            android:noHistory="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

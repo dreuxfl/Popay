@@ -1,12 +1,16 @@
 package com.popay
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+
 
 
 @SuppressLint("CustomSplashScreen")
@@ -22,8 +26,14 @@ class SplashScreenActivity : AppCompatActivity() {
         )
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, AuthActivity::class.java)
-            startActivity(intent)
+            val sharedPreferences: SharedPreferences = getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+            sharedPreferences.getString("token", null)?.let {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            } ?: run {
+                val intent = Intent(this, AuthActivity::class.java)
+                startActivity(intent)
+            }
             finish()
         }, 3000)
     }
