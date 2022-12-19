@@ -43,9 +43,16 @@ class CartItemController(
                     val checkCartItem = cartItemService.findByCartIdAndProductId(checkCart.id, productId)
                     if (checkCartItem != null) {
                         checkCartItem.count = checkCartItem.count + cartItem.count
-                        cartItemService.save(checkCartItem)
+                        if (checkCartItem.count <= 0) {
+                            cartItemService.delete(checkCartItem.id)
+                        } else {
+                            cartItemService.save(checkCartItem)
+                        }
                         return ResponseEntity(ResponseMessage(true, "Cart item updated successfully"), HttpStatus.CREATED)
                     } else {
+                        if (cartItem.count <= 0) {
+                            return ResponseEntity(ResponseMessage(false, "Cart item count must be greater than 0"), HttpStatus.BAD_REQUEST)
+                        }
                         val newCartItem = CartItem(
                             cart = checkCart,
                             product = checkProduct,

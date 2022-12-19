@@ -21,4 +21,8 @@ class CartItemService(
     fun save(cartItem: CartItem): CartItem {
         return cartItemRepository.save(cartItem)
     }
+
+    fun delete(id: Long) {
+        cartItemRepository.deleteById(id)
+    }
 }

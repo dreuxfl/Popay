@@ -2,7 +2,6 @@ package com.tdev.popay.model
 
 import org.hibernate.Hibernate
 import jakarta.persistence.*
-import jakarta.validation.constraints.*
 
 @Entity
 @Table(name = "cart_item")
@@ -10,7 +9,6 @@ data class CartItem(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @get: Min(value = 1, message = "Count must be greater than 0")
     var count: Int = 0,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart")
