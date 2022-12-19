@@ -1,8 +1,8 @@
 package com.tdev.popay.controller
 
 import com.tdev.popay.dto.ResponseMessage
-import com.tdev.popay.model.CartItem
-import com.tdev.popay.service.CartItemService
+import com.tdev.popay.model.CartProduct
+import com.tdev.popay.service.CartProductService
 import com.tdev.popay.service.CartService
 import com.tdev.popay.service.ProductService
 import com.tdev.popay.service.TokenService
@@ -15,8 +15,8 @@ import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("/api")
-class CartItemController(
-    private val cartItemService: CartItemService,
+class CartProductController(
+    private val cartProductService: CartProductService,
     private val cartService: CartService,
     private val productService: ProductService,
     private val tokenService: TokenService,
@@ -28,11 +28,11 @@ class CartItemController(
         return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
-    @PostMapping("/cart_item/{product_id}")
+    @PostMapping("/cart_product/{product_id}")
     fun createCartItem(
         @RequestHeader("Authorization") token: String,
         @PathVariable(value = "product_id") productId: Long,
-        @Valid @RequestBody cartItem: CartItem
+        @Valid @RequestBody cartProduct: CartProduct
     ): ResponseEntity<Any> {
         val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
@@ -40,26 +40,26 @@ class CartItemController(
             if (checkCart != null) {
                 val checkProduct = productService.findById(productId)
                 if (checkProduct != null) {
-                    val checkCartItem = cartItemService.findByCartIdAndProductId(checkCart.id, productId)
-                    if (checkCartItem != null) {
-                        checkCartItem.count = checkCartItem.count + cartItem.count
-                        if (checkCartItem.count <= 0) {
-                            cartItemService.delete(checkCartItem.id)
+                    val checkCartProduct = cartProductService.findByCartIdAndProductId(checkCart.id, productId)
+                    if (checkCartProduct != null) {
+                        checkCartProduct.quantity = checkCartProduct.quantity + cartProduct.quantity
+                        if (checkCartProduct.quantity <= 0) {
+                            cartProductService.delete(checkCartProduct.id)
                         } else {
-                            cartItemService.save(checkCartItem)
+                            cartProductService.save(checkCartProduct)
                         }
-                        return ResponseEntity(ResponseMessage(true, "Cart item updated successfully"), HttpStatus.CREATED)
+                        return ResponseEntity(ResponseMessage(true, "Cart product updated successfully"), HttpStatus.CREATED)
                     } else {
-                        if (cartItem.count <= 0) {
-                            return ResponseEntity(ResponseMessage(false, "Cart item count must be greater than 0"), HttpStatus.BAD_REQUEST)
+                        if (cartProduct.quantity <= 0) {
+                            return ResponseEntity(ResponseMessage(false, "Cart product count must be greater than 0"), HttpStatus.BAD_REQUEST)
                         }
-                        val newCartItem = CartItem(
+                        val newCartProduct = CartProduct(
                             cart = checkCart,
                             product = checkProduct,
-                            count = cartItem.count
+                            quantity = cartProduct.quantity
                         )
-                        cartItemService.save(newCartItem)
-                        return ResponseEntity(ResponseMessage(true, "Cart item created successfully"), HttpStatus.CREATED)
+                        cartProductService.save(newCartProduct)
+                        return ResponseEntity(ResponseMessage(true, "Cart product created successfully"), HttpStatus.CREATED)
                     }
                 }
                 return ResponseEntity(ResponseMessage(false, "Product not found"), HttpStatus.BAD_REQUEST)
@@ -69,14 +69,14 @@ class CartItemController(
         return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
     }
 
-    @GetMapping("/cart_items")
+    @GetMapping("/cart_products")
     fun getCartItems(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
         val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkCart = cartService.findCurrentCartByUserId(userId)
             if (checkCart != null) {
-                val checkCartItems = cartItemService.findAllByCartId(checkCart.id)
-                return ResponseEntity(checkCartItems, HttpStatus.OK)
+                val checkCartProduct = cartProductService.findAllByCartId(checkCart.id)
+                return ResponseEntity(checkCartProduct, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
         }

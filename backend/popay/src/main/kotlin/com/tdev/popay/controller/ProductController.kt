@@ -39,7 +39,7 @@ class ProductController(
                     price = product.price,
                     caption = product.caption,
                     description = product.description,
-                    quantity = product.quantity,
+                    stock = product.stock,
                 )
                 productService.save(newProduct)
                 return ResponseEntity(ResponseMessage(true, "Product created successfully"), HttpStatus.CREATED)
@@ -99,7 +99,7 @@ class ProductController(
                         price = newProduct.price,
                         caption = newProduct.caption,
                         description = newProduct.description,
-                        quantity = newProduct.quantity,
+                        stock = newProduct.stock,
                     )
                     productService.save(product)
                     return ResponseEntity(ResponseMessage(true, "Product updated successfully"), HttpStatus.OK)

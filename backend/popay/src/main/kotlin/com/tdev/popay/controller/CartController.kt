@@ -2,7 +2,7 @@ package com.tdev.popay.controller
 
 import com.tdev.popay.dto.ResponseMessage
 import com.tdev.popay.model.Cart
-import com.tdev.popay.service.CartItemService
+import com.tdev.popay.service.CartProductService
 import com.tdev.popay.service.CartService
 import com.tdev.popay.service.TokenService
 import com.tdev.popay.service.UserService
@@ -17,7 +17,7 @@ import jakarta.validation.Valid
 @RequestMapping("/api")
 class CartController(
     private val cartService: CartService,
-    private val cartItemService: CartItemService,
+    private val cartProductService: CartProductService,
     private val tokenService: TokenService,
     private val userService: UserService
     ) {
@@ -56,9 +56,9 @@ class CartController(
             if (checkUser != null) {
                 val cart = cartService.findCurrentCartByUserId(userId)
                 if (cart != null) {
-                    val cartItems = cartItemService.findAllByCartId(cart.id)
-                    for (cartItem in cartItems) {
-                        cart.totalAmount = cart.totalAmount.plus((cartItem.product?.price ?: 0.0) * cartItem.count)
+                    val cartProducts = cartProductService.findAllByCartId(cart.id)
+                    for (cartProduct in cartProducts) {
+                        cart.totalAmount = cart.totalAmount.plus((cartProduct.product?.price ?: 0.0) * cartProduct.quantity)
                     }
                 }
                 return ResponseEntity(cart, HttpStatus.OK)
@@ -76,9 +76,9 @@ class CartController(
             if (checkUser != null) {
                 val carts = cartService.findAllPayedCartsByUserId(userId)
                 for (cart in carts) {
-                    val cartItems = cartItemService.findAllByCartId(cart.id)
-                    for (cartItem in cartItems) {
-                        cart.totalAmount = cart.totalAmount.plus((cartItem.product?.price ?: 0.0) * cartItem.count)
+                    val cartProducts = cartProductService.findAllByCartId(cart.id)
+                    for (cartProduct in cartProducts) {
+                        cart.totalAmount = cart.totalAmount.plus((cartProduct.product?.price ?: 0.0) * cartProduct.quantity)
                     }
                 }
                 return ResponseEntity(carts, HttpStatus.OK)
@@ -99,9 +99,9 @@ class CartController(
             if (checkUser != null) {
                 val cart = cartService.findOnePayedCartsByUserId(id, userId)
                 if (cart != null) {
-                    val cartItems = cartItemService.findAllByCartId(cart.id)
-                    for (cartItem in cartItems) {
-                        cart.totalAmount = cart.totalAmount.plus((cartItem.product?.price ?: 0.0) * cartItem.count)
+                    val cartProducts = cartProductService.findAllByCartId(cart.id)
+                    for (cartProduct in cartProducts) {
+                        cart.totalAmount = cart.totalAmount.plus((cartProduct.product?.price ?: 0.0) * cartProduct.quantity)
                     }
                 }
                 return ResponseEntity(cart, HttpStatus.OK)

@@ -4,12 +4,12 @@ import org.hibernate.Hibernate
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "cart_item")
-data class CartItem(
+@Table(name = "cart_product")
+data class CartProduct(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    var count: Int = 0,
+    var quantity: Int = 0,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart")
     val cart: Cart?,
@@ -24,7 +24,7 @@ data class CartItem(
        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) {
            return false
        }
-       other as CartItem
+       other as CartProduct
 
        return id == other.id
    }
@@ -33,6 +33,6 @@ data class CartItem(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_cart_item = $id , count = $count , cart = $cart , product = $product)"
+        return this::class.simpleName + "(id_cart_product = $id , quantity = $quantity , cart = $cart , product = $product)"
     }
 }
