@@ -29,7 +29,7 @@ class CartProductController(
     }
 
     @PostMapping("/cart_product/{product_id}")
-    fun createCartItem(
+    fun createCartProduct(
         @RequestHeader("Authorization") token: String,
         @PathVariable(value = "product_id") productId: Long,
         @Valid @RequestBody cartProduct: CartProduct
@@ -70,7 +70,7 @@ class CartProductController(
     }
 
     @GetMapping("/cart_products")
-    fun getCartItems(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
+    fun getCartProducts(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
         val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkCart = cartService.findCurrentCartByUserId(userId)
