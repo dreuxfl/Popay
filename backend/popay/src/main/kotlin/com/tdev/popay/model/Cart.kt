@@ -2,7 +2,6 @@ package com.tdev.popay.model
 
 import org.hibernate.Hibernate
 import jakarta.persistence.*
-import jakarta.validation.constraints.*
 import java.time.LocalDateTime
 
 @Entity
@@ -11,12 +10,11 @@ data class Cart(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @get: DecimalMin(value = "1.0", inclusive = false, message = "Amount must be greater than 1")
-    val total_amount: Double = 0.0,
-    val payment_date: LocalDateTime = LocalDateTime.now(),
+    var totalAmount: Double = 0.0,
+    val paymentDate: LocalDateTime? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
-    val user: User? = null,
+    val user: User?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -34,6 +32,6 @@ data class Cart(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_cart = $id , total_amount = $total_amount , payment_date = $payment_date , user = $user)"
+        return this::class.simpleName + "(id_cart = $id , total_amount = $totalAmount , payment_date = $paymentDate , user = $user)"
     }
 }
