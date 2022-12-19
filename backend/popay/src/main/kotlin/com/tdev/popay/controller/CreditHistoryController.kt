@@ -41,7 +41,7 @@ class CreditHistoryController(
                 )
                 creditHistoryService.save(newCreditHistory)
                 val creditedUser = checkUser.copy(
-                    wallet = checkUser.wallet?.plus(creditHistory.amount)
+                    wallet = checkUser.wallet.plus(creditHistory.amount)
                 )
                 userService.save(creditedUser)
                 return ResponseEntity(ResponseMessage(true, "Credit history created successfully"), HttpStatus.CREATED)

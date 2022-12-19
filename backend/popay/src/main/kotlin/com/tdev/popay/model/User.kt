@@ -22,7 +22,7 @@ data class User(
     @get: NotBlank(message = "Password is mandatory")
     @get: Size(min = 8, message = "Password should be at least 8 characters")
     val password: String = "",
-    val wallet: Double? = 0.0,
+    var wallet: Double = 0.0,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) {

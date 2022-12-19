@@ -11,7 +11,7 @@ data class Cart(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     var totalAmount: Double = 0.0,
-    val paymentDate: LocalDateTime? = null,
+    var paymentDate: LocalDateTime? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     val user: User?

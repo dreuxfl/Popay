@@ -10,7 +10,7 @@ data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @get: DecimalMin(value = "0.01", inclusive = false, message = "Price must be greater than 1")
+    @get: DecimalMin(value = "0.01", inclusive = false, message = "Price must be greater than 0.01")
     val price: Double = 0.0,
     @get: NotBlank(message = "Caption is mandatory")
     val caption: String = "",
