@@ -11,19 +11,20 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.popay.databinding.FragmentRegisterBinding
+import org.json.JSONObject
 
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val baseUrl = "http://10.136.0.1:8080/api"
+    private val baseUrl = "http://10.136.76.77:8080/api"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        // Inflate the layout for this fragment
+
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.registerEmail.doOnTextChanged { _, _, _, _ ->
@@ -69,17 +70,23 @@ class RegisterFragment : Fragment() {
 
             ) { //if no error send request
                 val queue = Volley.newRequestQueue(context)
+                val params = HashMap<String, String>()
+                params["email"] = binding.registerEmail.text.toString()
+                params["password"] = binding.registerPassword.text.toString()
+                params["first_name"] = binding.registerFullName.text.toString().split(" ")[0]
+                params["last_name"] = binding.registerFullName.text.toString().split(" ")[1]
+                val jsonObject = JSONObject(params as Map<*, *>)
                 val stringRequest = JsonObjectRequest(
                     Request.Method.POST,
-                    "$baseUrl/user",
-                    null,
+                    "$baseUrl/register",
+                    jsonObject,
                     { response ->
                         println(response.toString())
                         Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
                     },
                     {
-                        println(it.toString())
-                        Toast.makeText(context, it!!.message , Toast.LENGTH_LONG).show()
+                        println("ERRR ${it.toString()}")
+
                     }
                 )
                 queue.add(stringRequest)
