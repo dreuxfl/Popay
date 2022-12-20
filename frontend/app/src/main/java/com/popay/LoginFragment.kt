@@ -24,7 +24,7 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val baseUrl = "http://10.136.76.77:8080/api"
+    private val baseUrl = "http://172.24.64.1:8080/api"
     private val token : SharedPreferences? = null
 
     override fun onCreateView(
