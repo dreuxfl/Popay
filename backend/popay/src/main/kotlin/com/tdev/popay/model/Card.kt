@@ -11,6 +11,7 @@ data class Card(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     @get: NotBlank(message = "Card nfc id is mandatory")
+    @get: Size(min = 14, max = 14, message = "Card nfc id should be 14 characters")
     val nfcId: String = "",
     @get: DecimalMin(value = "0.01", inclusive = false, message = "Total amount must be greater than 0.01")
     val totalAmount: Double = 0.0,
