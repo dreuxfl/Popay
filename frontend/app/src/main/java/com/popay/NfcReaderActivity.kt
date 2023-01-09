@@ -14,6 +14,11 @@ import android.os.Vibrator
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONObject
 
 
 class NfcReaderActivity : AppCompatActivity()
@@ -34,6 +39,7 @@ class NfcReaderActivity : AppCompatActivity()
         0x00.toByte(), // Starting address
         BLOCKS_TO_READ.toByte()  // Number of blocks to be read from the NFC Tag
     )
+    private var amount = 0.00;
 
     private var nfcAdapter: NfcAdapter? = null
 
@@ -42,6 +48,8 @@ class NfcReaderActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.nfc_reader_activity)
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        val bundle = intent.extras
+        //amount = bundle?.getDouble("amount")!!
         if (nfcAdapter == null) {
             Toast.makeText(this, "NFC is not available", Toast.LENGTH_LONG).show()
             finish()
@@ -59,12 +67,28 @@ class NfcReaderActivity : AppCompatActivity()
 
         nfcA.connect()
 
+
         if (nfcA.isConnected) {
             //val data = nfcA.transceive(NFC_READ_COMMAND)
             nfcA.close()
             val uid = tagFromIntent?.id
             val uidString = uid?.joinToString("") { "%02X".format(it) }
-            println("HELLOOOOO  $uidString")
+            print("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+            Log.d("tag ID", uidString.toString())
+          //  val queue = Volley.newRequestQueue(this)
+            //  val url = "http://localhost:8080/api/credit_history/$uidString"
+            //   val params = HashMap<String, Double>()
+            //   params["amount"] = amount
+            //   val stringRequest = JsonObjectRequest(
+            //      Request.Method.POST, url, JSONObject((params as Map<*, *>?)!!),
+            //      { response ->
+            //          Log.d("Response", response.toString())
+            //     },
+        //      { error ->
+            //          Log.d("Error.Response", error.toString())
+            //       }
+            //    )
+            //    queue.add(stringRequest)
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (vibrator.hasVibrator()) {
                 vibrator.vibrate(
