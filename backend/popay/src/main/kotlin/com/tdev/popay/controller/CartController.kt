@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import jakarta.validation.Valid
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api")
@@ -105,6 +106,40 @@ class CartController(
                     }
                 }
                 return ResponseEntity(cart, HttpStatus.OK)
+            }
+            return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
+        }
+        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
+    }
+
+    @PostMapping("/cart/validate")
+    fun validateCart(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
+        val userId = tokenService.getUserIdFromToken(token)
+        if (userId != null) {
+            val checkUser = userService.findById(userId)
+            if (checkUser != null) {
+                val cart = cartService.findCurrentCartByUserId(userId)
+                if (cart != null) {
+                    val cartProducts = cartProductService.findAllByCartId(cart.id)
+                    if (cartProducts.isNotEmpty()) {
+                        for (cartProduct in cartProducts) {
+                            cart.totalAmount = cart.totalAmount.plus((cartProduct.product?.price ?: 0.0) * cartProduct.quantity)
+                            if ((cartProduct.product?.stock ?: 0) < cartProduct.quantity) {
+                                return ResponseEntity(ResponseMessage(false, "There is not enough ${cartProduct.product?.caption} in stock"), HttpStatus.BAD_REQUEST)
+                            }
+                        }
+                        if (cart.totalAmount <= checkUser.wallet) {
+                            checkUser.wallet = checkUser.wallet.minus(cart.totalAmount)
+                            userService.save(checkUser)
+                            cart.paymentDate = LocalDateTime.now()
+                            cartService.save(cart)
+                            return ResponseEntity(ResponseMessage(true, "Cart validated successfully"), HttpStatus.OK)
+                        }
+                        return ResponseEntity(ResponseMessage(false, "Not enough money in wallet"), HttpStatus.BAD_REQUEST)
+                    }
+                    return ResponseEntity(ResponseMessage(false, "Cart is empty"), HttpStatus.BAD_REQUEST)
+                }
+                return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
             }
             return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
         }
