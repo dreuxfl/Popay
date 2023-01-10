@@ -22,7 +22,6 @@ class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null
 
     private lateinit var cartListRecyclerView: RecyclerView
-    private  var cartList : ArrayList<Product> = arrayListOf()
     private val token : SharedPreferences? = null
     private var baseUrl : String? = null
 
@@ -30,15 +29,15 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         baseUrl = context?.getString(R.string.baseUrl)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        getUserData()
         cartListRecyclerView = binding!!.cartList
 
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        cartListRecyclerView.adapter = CartAdapter(cartList)
+        cartListRecyclerView.adapter = CartAdapter(getUserData())
         cartListRecyclerView.adapter!!.notifyDataSetChanged()
 
         binding!!.scanBtn.setOnClickListener {
@@ -55,14 +54,16 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun getUserData() {
+    private fun getUserData() : ArrayList<Product>{
+        var cartList : ArrayList<Product> = arrayListOf()
+
         val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", null)
         val queue = Volley.newRequestQueue(context)
 
         val arrayRequest : JsonArrayRequest = object : JsonArrayRequest(
-            Method.POST,
-            "$baseUrl/cart",
+            Method.GET,
+            "$baseUrl/cart_products",
             null,
             { response ->
                 try{
@@ -72,7 +73,7 @@ class HomeFragment : Fragment() {
                         val cartItemName = cartItemProduct.getString("caption")
                         val cartItemPrice = cartItemProduct.getDouble("price")
                         val cartItemStock = cartItemProduct.getInt("stock")
-                        cartList.add(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
+                        cartList.plus(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
 
                     }
                 } catch (e: Exception) {
@@ -94,6 +95,7 @@ class HomeFragment : Fragment() {
         }
         queue.add(arrayRequest)
 
+        return cartList;
 
     }
 }
