@@ -33,11 +33,13 @@ class HomeFragment : Fragment() {
         baseUrl = context?.getString(R.string.baseUrl)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        getUserData()
         cartListRecyclerView = binding!!.cartList
+
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        getUserData()
         cartListRecyclerView.adapter = CartAdapter(cartList)
+        cartListRecyclerView.adapter!!.notifyDataSetChanged()
 
         binding!!.scanBtn.setOnClickListener {
             val intent = Intent (activity, QRCodeScannerActivity::class.java)
@@ -92,9 +94,6 @@ class HomeFragment : Fragment() {
         }
         queue.add(arrayRequest)
 
-        cartListRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        cartListRecyclerView.adapter = CartAdapter(cartList)
-        cartListRecyclerView.adapter!!.notifyDataSetChanged()
     }
 }
