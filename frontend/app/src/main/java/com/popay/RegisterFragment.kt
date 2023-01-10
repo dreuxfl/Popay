@@ -20,7 +20,7 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val baseUrl = "http://172.24.64.1:8080/api"
+    private val baseUrl = "http://10.136.76.77:8080/api"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

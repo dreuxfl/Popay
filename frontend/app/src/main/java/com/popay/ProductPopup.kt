@@ -5,22 +5,24 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.popay.entities.Product
+import org.json.JSONObject
 
 class ProductPopup: AppCompatActivity() {
 
@@ -31,11 +33,15 @@ class ProductPopup: AppCompatActivity() {
     private var popupButton = ""
     private var darkStatusBar = false
     private var popUpproduct: Product? = null
+    private var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
         setContentView(R.layout.confirm_product_popup)
+
+        val sharedPreferences: SharedPreferences = getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+        token = sharedPreferences.getString("token", null).toString()
 
         val productName = findViewById<TextView>(R.id.popup_window_productname)
         val description = findViewById<TextView>(R.id.popup_window_productDesc)
@@ -77,7 +83,30 @@ class ProductPopup: AppCompatActivity() {
         price.text = popUpproduct!!.price.toString() + " €"
 
         confirmBtn.setOnClickListener{
-            onBackPressed()
+            val queue = Volley.newRequestQueue(this)
+
+            val urlPostProduct = "http://10.136.76.77:8080/api/cart_product/${popUpproduct!!.id}"
+            val params = HashMap<String, Double>()
+            params["quantity"] = popUpproduct!!.quantity.toDouble()
+            val postProduct : JsonObjectRequest = object : JsonObjectRequest(
+                Method.POST, urlPostProduct, JSONObject((params as Map<*, *>?)!!), { response1 ->
+                    if (response1.getBoolean("success")) {
+                        Toast.makeText(this, "Product Posted", Toast.LENGTH_LONG).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                    }
+                }, {
+                    Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                }
+            ) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val params2: MutableMap<String, String> = HashMap()
+                    params2["Authorization"] = "Bearer $token"
+                    return params2
+                }
+            }
+            queue.add(postProduct)
         }
 
         if (Build.VERSION.SDK_INT in 19..20) {

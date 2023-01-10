@@ -1,6 +1,7 @@
 package com.popay
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -32,12 +33,15 @@ class QRCodeScannerActivity : AppCompatActivity() {
     private lateinit var barcodeDetector: BarcodeDetector
     private var scannedValue = ""
     private lateinit var binding: QrcodeScannerBinding
+    private var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = QrcodeScannerBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        val sharedPreferences: SharedPreferences = getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+        token = sharedPreferences.getString("token", null).toString()
 
         if (ContextCompat.checkSelfPermission(
                 this@QRCodeScannerActivity, android.Manifest.permission.CAMERA
@@ -112,7 +116,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
                         Toast.makeText(this@QRCodeScannerActivity, "value: $scannedValue", Toast.LENGTH_SHORT).show()
                         finish()
                         val queue = Volley.newRequestQueue(this@QRCodeScannerActivity)
-                        val jsonObjectRequest = JsonObjectRequest(
+                        val jsonObjectRequest : JsonObjectRequest = object : JsonObjectRequest(
                             "http://10.136.76.77:8080/api/product/$scannedValue",
                             null,
                             { response ->
@@ -129,7 +133,13 @@ class QRCodeScannerActivity : AppCompatActivity() {
                             { error ->
                                 println("Err $error")
                             }
-                        )
+                        ){
+                            override fun getHeaders(): MutableMap<String, String> {
+                                val params2: MutableMap<String, String> = HashMap()
+                                params2["Authorization"] = "Bearer $token"
+                                return params2
+                            }
+                        }
                         queue.add(jsonObjectRequest)
 
                     }

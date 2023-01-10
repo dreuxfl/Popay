@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.NfcA
@@ -14,10 +15,14 @@ import android.os.Vibrator
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.AuthFailureError
+import com.android.volley.Header
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.JsonRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+
 import org.json.JSONObject
 
 
@@ -39,7 +44,8 @@ class NfcReaderActivity : AppCompatActivity()
         0x00.toByte(), // Starting address
         BLOCKS_TO_READ.toByte()  // Number of blocks to be read from the NFC Tag
     )
-    private var amount = 0.00;
+    private var amount = 50.00;
+    private var token = "";
 
     private var nfcAdapter: NfcAdapter? = null
 
@@ -49,6 +55,8 @@ class NfcReaderActivity : AppCompatActivity()
         setContentView(R.layout.nfc_reader_activity)
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
         val bundle = intent.extras
+        val sharedPreferences: SharedPreferences = getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+        token = sharedPreferences.getString("token", null).toString()
         //amount = bundle?.getDouble("amount")!!
         if (nfcAdapter == null) {
             Toast.makeText(this, "NFC is not available", Toast.LENGTH_LONG).show()
@@ -73,22 +81,52 @@ class NfcReaderActivity : AppCompatActivity()
             nfcA.close()
             val uid = tagFromIntent?.id
             val uidString = uid?.joinToString("") { "%02X".format(it) }
-            print("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
-            Log.d("tag ID", uidString.toString())
-          //  val queue = Volley.newRequestQueue(this)
-            //  val url = "http://localhost:8080/api/credit_history/$uidString"
-            //   val params = HashMap<String, Double>()
-            //   params["amount"] = amount
-            //   val stringRequest = JsonObjectRequest(
-            //      Request.Method.POST, url, JSONObject((params as Map<*, *>?)!!),
-            //      { response ->
-            //          Log.d("Response", response.toString())
-            //     },
-        //      { error ->
-            //          Log.d("Error.Response", error.toString())
-            //       }
-            //    )
-            //    queue.add(stringRequest)
+
+            val queue = Volley.newRequestQueue(this)
+
+            val urlVAlidateCart = "http://10.136.76.77:8080/api/cart/validate"
+            val CartValidationRequest : JsonObjectRequest = object : JsonObjectRequest(
+                Method.POST, urlVAlidateCart, JSONObject(), { response1 ->
+                    if (response1.getBoolean("success")) {
+                        Toast.makeText(this, "Payment successful", Toast.LENGTH_LONG).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                    }
+                }, {
+                    Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                }
+            ) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val params2: MutableMap<String, String> = HashMap()
+                    params2["Authorization"] = "Bearer $token"
+                    return params2
+                }
+            }
+
+            val creditHistoryurl = "http://10.136.76.77:8080/api/credit_history/$uidString"
+            val params = HashMap<String, Double>()
+            params["amount"] = amount
+            val creditRequest = object : JsonObjectRequest(
+                Method.POST, creditHistoryurl, JSONObject((params as Map<*, *>?)!!),
+                { response ->
+                    if (response.getBoolean("success")) {
+                        queue.add(CartValidationRequest)
+                    } else {
+                        Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                    }
+                },
+                { error ->
+                    Log.d("Error.Response", error.toString())
+                }
+            ) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val params1: MutableMap<String, String> = HashMap()
+                    params1["Authorization"] = "Bearer $token"
+                    return params1
+                }
+            }
+            queue.add(creditRequest)
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (vibrator.hasVibrator()) {
                 vibrator.vibrate(
