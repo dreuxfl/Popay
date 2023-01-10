@@ -20,13 +20,13 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val baseUrl = "http://172.24.64.1:8080/api"
+    private var baseUrl : String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-
+        baseUrl = context?.getString(R.string.baseUrl)
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.registerEmail.doOnTextChanged { _, _, _, _ ->

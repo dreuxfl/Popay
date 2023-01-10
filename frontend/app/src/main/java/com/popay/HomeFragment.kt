@@ -28,15 +28,11 @@ class HomeFragment : Fragment() {
 
         cartListRecyclerView = binding!!.cartList
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
-      //  cartListRecyclerView.setHasFixedSize(true)
 
-            cartList.add(Product(0, "maxence", 1.00, "Very cringe boy", 1))
+        cartList.add(Product(0, "maxence", 1.00, "Very cringe boy", 1))
         cartList.add(Product(1, "corki", 10.00, "No lore", 5))
         cartList.add(Product(2, "kitto katto", 3.99, "キットカット", 13))
         cartListRecyclerView.adapter = CartAdapter(cartList)
-
-    //    cartList = arrayListOf()
-Log.e("ttt","t")
 
         binding!!.scanBtn.setOnClickListener {
             val intent = Intent (activity, QRCodeScannerActivity::class.java)
@@ -53,9 +49,6 @@ Log.e("ttt","t")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      //  getUserData()
-
-
     }
 
     private fun getUserData() {
