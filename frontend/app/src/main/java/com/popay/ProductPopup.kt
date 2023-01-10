@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
@@ -106,7 +107,43 @@ class ProductPopup: AppCompatActivity() {
                     return params2
                 }
             }
+
+            val urlCreateCart = "http://10.136.76.77:8080/api/cart"
+            val postCart : JsonObjectRequest = object : JsonObjectRequest(
+                Method.POST, urlCreateCart, JSONObject(), { response1 ->
+                    Log.d("RESPONSE GET CART",response1.toString())
+                }, {
+
+                }
+            ) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val params2: MutableMap<String, String> = HashMap()
+                    params2["Authorization"] = "Bearer $token"
+                    return params2
+                }
+            }
+
+            val urlCheckCart = "http://10.136.76.77:8080/api/cart"
+            val getCurrentCart : JsonObjectRequest = object : JsonObjectRequest(
+                Method.GET, urlCheckCart, JSONObject(), { response1 ->
+
+
+                }, {
+                    queue.add(postCart)
+
+
+                }
+            ) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val params2: MutableMap<String, String> = HashMap()
+                    params2["Authorization"] = "Bearer $token"
+                    return params2
+                }
+            }
+            queue.add(getCurrentCart)
             queue.add(postProduct)
+            finish()
+
         }
 
         if (Build.VERSION.SDK_INT in 19..20) {

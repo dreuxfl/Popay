@@ -113,8 +113,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
 
                     runOnUiThread {
                         cameraSource.stop()
-                        Toast.makeText(this@QRCodeScannerActivity, "value: $scannedValue", Toast.LENGTH_SHORT).show()
-                        finish()
+
                         val queue = Volley.newRequestQueue(this@QRCodeScannerActivity)
                         val jsonObjectRequest : JsonObjectRequest = object : JsonObjectRequest(
                             "http://10.136.76.77:8080/api/product/$scannedValue",
@@ -141,7 +140,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
                             }
                         }
                         queue.add(jsonObjectRequest)
-
+                        finish()
                     }
                 }else
                 {

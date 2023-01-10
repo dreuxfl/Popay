@@ -26,7 +26,6 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.registerEmail.doOnTextChanged { _, _, _, _ ->

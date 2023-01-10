@@ -27,8 +27,6 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        println("testt")
-        Log.e("ttttttfffft","t")
 
         holder.cartItemCaption.text = CartItems[position].name
         holder.cartItemPrice.text = CartItems[position].price.toString()

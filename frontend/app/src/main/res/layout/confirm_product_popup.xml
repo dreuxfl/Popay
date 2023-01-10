@@ -44,7 +44,7 @@
                 android:layout_width="250dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:background="#998d25"
+                android:background="#303030"
                 android:minHeight="170dp">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="80dp"
-                    android:background="#bdb042"
+                    android:background="#63635F"
                     android:gravity="center"
                     android:text="@string/produit_scann"
                     android:textAlignment="center"
@@ -92,17 +92,17 @@
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="251dp"
                     android:layout_height="50dp"
-                    android:background="#FFEB3B"
+                    android:background="#404040"
                     android:text="@string/ajouter_au_panier"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
-                    android:textColorLink="#FFEB3B"
+                    android:textColorLink="#333333"
                     android:textSize="20sp"
                     app:iconTint="#C5B3B3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:rippleColor="#FFEB3B" />
+                    app:rippleColor="#4A4A4A" />
 
                 <ImageView
                     android:id="@+id/popup_window_productImage"
