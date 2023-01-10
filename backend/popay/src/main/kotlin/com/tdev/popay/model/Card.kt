@@ -2,19 +2,18 @@ package com.tdev.popay.model
 
 import org.hibernate.Hibernate
 import jakarta.persistence.*
-import java.time.LocalDateTime
+import jakarta.validation.constraints.*
 
 @Entity
-@Table(name = "cart")
-data class Cart(
+@Table(name = "card",  uniqueConstraints = [UniqueConstraint(columnNames = ["nfcId"])])
+data class Card(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    var totalAmount: Double = 0.0,
-    var paymentDate: LocalDateTime? = null,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user")
-    val user: User?
+    @get: NotBlank(message = "Card nfc id is mandatory")
+    val nfcId: String = "",
+    @get: DecimalMin(value = "0.01", inclusive = false, message = "Total amount must be greater than 0.01")
+    val totalAmount: Double = 0.0,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -23,7 +22,7 @@ data class Cart(
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) {
             return false
         }
-        other as Cart
+        other as Card
 
         return id == other.id
     }
@@ -32,6 +31,6 @@ data class Cart(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_cart = $id , total_amount = $totalAmount , payment_date = $paymentDate , user = $user)"
+        return this::class.simpleName + "(id_card = $id, nfc_id = $nfcId, total_amount = $totalAmount)"
     }
 }
