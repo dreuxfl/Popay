@@ -16,7 +16,10 @@ data class CreditHistory(
     val transactionDate: LocalDateTime = LocalDateTime.now(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
-    val user: User?
+    val user: User?,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card")
+    val card: Card?,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -34,6 +37,6 @@ data class CreditHistory(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id_credit_history = $id , credit = $amount , transaction_date = $transactionDate , user = $user)"
+        return this::class.simpleName + "(id_credit_history = $id , credit = $amount , transaction_date = $transactionDate , user = $user , card = $card)"
     }
 }

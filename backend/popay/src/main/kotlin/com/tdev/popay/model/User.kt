@@ -21,8 +21,9 @@ data class User(
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @get: NotBlank(message = "Password is mandatory")
     @get: Size(min = 8, message = "Password should be at least 8 characters")
+    @get: Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$", message = "Password should contain at least one digit, one lowercase, one uppercase, one special character and no whitespace")
     val password: String = "",
-    val wallet: Double? = 0.0,
+    var wallet: Double = 0.0,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) {
