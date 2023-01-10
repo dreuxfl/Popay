@@ -34,11 +34,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         cartListRecyclerView = binding!!.cartList
-
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        cartListRecyclerView.adapter = CartAdapter(getUserData())
-        cartListRecyclerView.adapter!!.notifyDataSetChanged()
 
         binding!!.scanBtn.setOnClickListener {
             val intent = Intent (activity, QRCodeScannerActivity::class.java)
@@ -53,8 +49,12 @@ class HomeFragment : Fragment() {
         return binding!!.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getUserData()
+    }
 
-    private fun getUserData() : ArrayList<Product>{
+    private fun getUserData() {
         var cartList : ArrayList<Product> = arrayListOf()
 
         val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
@@ -95,7 +95,9 @@ class HomeFragment : Fragment() {
         }
         queue.add(arrayRequest)
 
-        return cartList;
+        cartListRecyclerView.adapter = CartAdapter(cartList)
+        cartListRecyclerView.adapter!!.notifyDataSetChanged()
+
 
     }
 }
