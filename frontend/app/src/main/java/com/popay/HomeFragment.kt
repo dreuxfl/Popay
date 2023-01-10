@@ -36,6 +36,7 @@ class HomeFragment : Fragment() {
         cartListRecyclerView = binding!!.cartList
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        getUserData()
         cartListRecyclerView.adapter = CartAdapter(cartList)
 
         binding!!.scanBtn.setOnClickListener {
