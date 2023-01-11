@@ -80,6 +80,7 @@
         android:layout_height="@dimen/fragment_button_height"
         android:layout_gravity="start"
         android:layout_marginTop="@dimen/fragment_vertical_margin_big"
+        android:backgroundTint="@color/cyber_yellow"
         android:elevation="16dp"
         android:enabled="true"
         android:text="@string/action_sign_in"

@@ -6,7 +6,7 @@
     <string name="menu_register">Register</string>
     <string name="menu_login">Login</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Cart</string>
     <string name="menu_credit">Credit</string>
     <!-- Strings related to login -->
     <string name="popay_logo_description">poPay Logo</string>

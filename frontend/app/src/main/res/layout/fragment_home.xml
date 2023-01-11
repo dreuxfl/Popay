@@ -17,16 +17,16 @@
         android:layout_height="590dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/nfc_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#DBB82E"
+        android:backgroundTint="@color/cyber_yellow"
         android:text="@string/nfc_btn_text"
+        app:cornerRadius="@dimen/fragment_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/scan_btn"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,10 +40,11 @@
         android:layout_marginStart="36dp"
         android:backgroundTint="@color/cyber_yellow"
         android:text="@string/scan_btn_text"
+        app:cornerRadius="@dimen/fragment_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/nfc_btn"
         app:layout_constraintTop_toBottomOf="@+id/cart_list"
         app:layout_constraintVertical_bias="0.954" />
 
-</androidx.constraintlayout.widget.ConstraintLayout >
+</androidx.constraintlayout.widget.ConstraintLayout>
