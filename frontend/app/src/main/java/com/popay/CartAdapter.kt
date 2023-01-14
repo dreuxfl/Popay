@@ -30,7 +30,6 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
         holder.cartItemPrice.text = CartItems[position].price.toString()
         holder.cartItemQuantity.text = CartItems[position].quantity.toString()
     }
-
     override fun getItemCount(): Int {
         return CartItems.size
     }

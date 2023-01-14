@@ -24,6 +24,7 @@ class HomeFragment : Fragment() {
     private lateinit var cartListRecyclerView: RecyclerView
     private val token : SharedPreferences? = null
     private var baseUrl : String? = null
+    private var cartList : ArrayList<Product> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +56,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getUserData() {
-        var cartList : ArrayList<Product> = arrayListOf()
+
 
         val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", null)
@@ -67,20 +68,21 @@ class HomeFragment : Fragment() {
             null,
             { response ->
                 try{
+                    cartList = arrayListOf()
                     for(i in 0 until response.length()){
                         val cartItemProduct = response.getJSONObject(i).getJSONObject("product")
                         val cartItemId = cartItemProduct.getInt("id")
                         val cartItemName = cartItemProduct.getString("caption")
                         val cartItemPrice = cartItemProduct.getDouble("price")
                         val cartItemStock = cartItemProduct.getInt("stock")
-                        cartList.plus(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
-
+                        cartList.add(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
                     }
+                    println(cartList)
+                    cartListRecyclerView.adapter = CartAdapter(cartList)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(context, "Fatal error, call dev", Toast.LENGTH_LONG).show()
                 }
-
             },
             {
                 println("ERRR ${it}")
@@ -95,8 +97,8 @@ class HomeFragment : Fragment() {
         }
         queue.add(arrayRequest)
 
-        cartListRecyclerView.adapter = CartAdapter(cartList)
-        cartListRecyclerView.adapter!!.notifyDataSetChanged()
+
+
 
 
     }
