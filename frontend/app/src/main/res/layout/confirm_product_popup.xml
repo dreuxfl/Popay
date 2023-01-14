@@ -159,8 +159,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView2"
                     app:layout_constraintVertical_bias="0.12"
-                    app:srcCompat="@android:drawable/ic_menu_delete"
-                    tools:srcCompat="@android:drawable/presence_busy" />
+                    app:srcCompat="@android:drawable/ic_menu_delete" />
 
                 <TextView
                     android:id="@+id/textView2"
