@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
             activity?.startActivity(intent)
         }
 
+
         binding!!.nfcBtn.setOnClickListener {
             val intent = Intent (activity, NfcReaderActivity::class.java)
             activity?.startActivity(intent)
@@ -56,8 +57,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun getUserData() {
-
-
         val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", null)
         val queue = Volley.newRequestQueue(context)
@@ -74,7 +73,7 @@ class HomeFragment : Fragment() {
                         val cartItemId = cartItemProduct.getInt("id")
                         val cartItemName = cartItemProduct.getString("caption")
                         val cartItemPrice = cartItemProduct.getDouble("price")
-                        val cartItemStock = cartItemProduct.getInt("stock")
+                        val cartItemStock = response.getJSONObject(i).getInt("quantity")
                         cartList.add(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
                     }
                     println(cartList)
@@ -96,10 +95,6 @@ class HomeFragment : Fragment() {
             }
         }
         queue.add(arrayRequest)
-
-
-
-
 
     }
 }
