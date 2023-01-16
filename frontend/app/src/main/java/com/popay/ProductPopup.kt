@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
@@ -39,6 +40,7 @@ class ProductPopup: AppCompatActivity() {
     private var popUpproduct: Product? = null
     private var token = ""
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
@@ -96,12 +98,11 @@ class ProductPopup: AppCompatActivity() {
                 Method.POST, urlPostProduct, JSONObject((params as Map<*, *>?)!!), { response1 ->
                     if (response1.getBoolean("success")) {
                         Toast.makeText(this, "Product Posted", Toast.LENGTH_LONG).show()
-                        finish()
                     } else {
-                        Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Product Post Failed", Toast.LENGTH_LONG).show()
                     }
                 }, {
-                    Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "No response from server", Toast.LENGTH_LONG).show()
                 }
             ) {
                 override fun getHeaders(): MutableMap<String, String> {
@@ -111,40 +112,9 @@ class ProductPopup: AppCompatActivity() {
                 }
             }
 
-            val urlCreateCart = "http://10.136.76.77:8080/api/cart"
-            val postCart : JsonObjectRequest = object : JsonObjectRequest(
-                Method.POST, urlCreateCart, JSONObject(), { response1 ->
-                    Log.d("RESPONSE GET CART",response1.toString())
-                }, {
 
-                }
-            ) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    val params2: MutableMap<String, String> = HashMap()
-                    params2["Authorization"] = "Bearer $token"
-                    return params2
-                }
-            }
-
-            val urlCheckCart = "http://10.136.76.77:8080/api/cart"
-            val getCurrentCart : JsonObjectRequest = object : JsonObjectRequest(
-                Method.GET, urlCheckCart, JSONObject(), { response1 ->
-
-
-                }, {
-                    queue.add(postCart)
-
-
-                }
-            ) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    val params2: MutableMap<String, String> = HashMap()
-                    params2["Authorization"] = "Bearer $token"
-                    return params2
-                }
-            }
-            queue.add(getCurrentCart)
             queue.add(postProduct)
+
             finish()
 
         }
