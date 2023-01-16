@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/cart_item_caption"
-        android:layout_width="150dp"
+        android:layout_width="35pt"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fragment_horizontal_margin"
         android:layout_marginEnd="@dimen/fragment_horizontal_margin_small"
@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/cart_item_price"
-        android:layout_width="wrap_content"
+        android:layout_width="20pt"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
         android:layout_marginEnd="@dimen/fragment_horizontal_margin_small"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/cart_item_quantity"
-        android:layout_width="50dp"
+        android:layout_width="20pt"
         android:layout_height="wrap_content"
 
         android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
@@ -47,8 +47,8 @@
 
     <ImageButton
         android:id="@+id/cart_item_minus"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -66,8 +66,8 @@
 
     <ImageButton
         android:id="@+id/cart_item_plus"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
