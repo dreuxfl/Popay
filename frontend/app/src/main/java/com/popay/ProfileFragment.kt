@@ -79,7 +79,7 @@ class ProfileFragment : Fragment() {
                 val jsonObject = JSONObject(params as Map<*, *>)
                 val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
                 val token = sharedPreferences?.getString("token", null)
-                val stringRequest = JsonObjectRequest = object : JsonObjectRequest(
+                val stringRequest = object : JsonObjectRequest(
                     Method.PUT,
                     "$baseUrl/user",
                     jsonObject,
@@ -98,12 +98,13 @@ class ProfileFragment : Fragment() {
                     }
                 ){
                     override fun getHeaders(): MutableMap<String, String> {
-                        val params: MutableMap<String, String> = HashMap()
-                        params["Authorization"] = "Bearer $token"
+                        val params1: MutableMap<String, String> = HashMap()
+                        params1["Authorization"] = "Bearer $token"
                         return params
                     }
                 }
                 queue.add(stringRequest)
+
 
             } else {
                 Toast.makeText(context, "All fields must be filled in", Toast.LENGTH_LONG).show()
