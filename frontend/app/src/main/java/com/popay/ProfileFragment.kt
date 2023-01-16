@@ -1,6 +1,7 @@
 package com.popay
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -62,6 +63,12 @@ class ProfileFragment : Fragment() {
             binding.editProfile.isEnabled = true
         }
 
+        binding.logout.setOnClickListener{
+            logout()
+        }
+
+
+
         binding.editProfile.setOnClickListener {
             if(
                 binding.profileEmailLayout.error.isNullOrEmpty() &&
@@ -110,12 +117,25 @@ class ProfileFragment : Fragment() {
                 Toast.makeText(context, "All fields must be filled in", Toast.LENGTH_LONG).show()
             }
         }
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getUserData()
+    }
+
+    fun logout(){
+        println("logout")
+        val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.remove("token")
+        editor?.apply()
+        val intent = Intent(context, AuthActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
     }
 
     private fun getUserData() {

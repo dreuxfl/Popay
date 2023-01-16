@@ -75,7 +75,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="68dp"
         android:paddingHorizontal="@dimen/fragment_horizontal_margin"
-        android:text="99999.99"
         android:tooltipText="Prix total : "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cart_item_total_quantity_tooltip" />
