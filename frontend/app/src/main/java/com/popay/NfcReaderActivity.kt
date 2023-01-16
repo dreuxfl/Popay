@@ -100,7 +100,7 @@ class NfcReaderActivity : AppCompatActivity()
                 }, {
                     val intent1 = Intent(this, MainActivity::class.java)
                     startActivity(intent1)
-                    Toast.makeText(this, "Server Error", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "transaction failed - insufficient funds", Toast.LENGTH_LONG).show()
                 }
             ) {
                 override fun getHeaders(): MutableMap<String, String> {
