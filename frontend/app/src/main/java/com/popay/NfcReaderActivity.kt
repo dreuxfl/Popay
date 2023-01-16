@@ -89,12 +89,18 @@ class NfcReaderActivity : AppCompatActivity()
                 Method.POST, urlVAlidateCart, JSONObject(), { response1 ->
                     if (response1.getBoolean("success")) {
                         Toast.makeText(this, "Payment successful", Toast.LENGTH_LONG).show()
+                        val intent1 = Intent(this, MainActivity::class.java)
+                        startActivity(intent1)
                         finish()
                     } else {
+                        val intent1 = Intent(this, MainActivity::class.java)
+                        startActivity(intent1)
                         Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
                     }
                 }, {
-                    Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                    val intent1 = Intent(this, MainActivity::class.java)
+                    startActivity(intent1)
+                    Toast.makeText(this, "Server Error", Toast.LENGTH_LONG).show()
                 }
             ) {
                 override fun getHeaders(): MutableMap<String, String> {
@@ -117,6 +123,9 @@ class NfcReaderActivity : AppCompatActivity()
                     }
                 },
                 { error ->
+                    val intent1 = Intent(this, MainActivity::class.java)
+                    startActivity(intent1)
+                    Toast.makeText(this, "Payment failed, Invalid Credit Card", Toast.LENGTH_LONG).show()
                     Log.d("Error.Response", error.toString())
                 }
             ) {

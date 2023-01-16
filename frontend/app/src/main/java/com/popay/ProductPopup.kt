@@ -7,16 +7,14 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -30,10 +28,6 @@ class ProductPopup: AppCompatActivity() {
 
 
     private var popupText = ""
-    private var popupBtnPlus = ""
-    private var popupBtnMoins = ""
-    private var popupButton = ""
-    private var darkStatusBar = false
     private var popUpproduct: Product? = null
     private var token = ""
 
@@ -112,7 +106,11 @@ class ProductPopup: AppCompatActivity() {
 
             queue.add(postProduct)
 
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
             finish()
+
 
         }
 
@@ -122,7 +120,7 @@ class ProductPopup: AppCompatActivity() {
         val alpha = 100
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), Color.TRANSPARENT, alphaColor)
-        colorAnimation.duration = 500 // milliseconds
+        colorAnimation.duration = 500
         colorAnimation.addUpdateListener { animator ->
             viewBackground.setBackgroundColor(animator.animatedValue as Int)
         }
@@ -131,8 +129,6 @@ class ProductPopup: AppCompatActivity() {
         viewWithBorder.animate().alpha(1f).setDuration(500).setInterpolator(
             DecelerateInterpolator()
         ).start()
-
-
     }
 
     private fun setWindowFlag(activity: Activity, on: Boolean) {
