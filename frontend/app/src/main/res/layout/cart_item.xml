@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/cart_item_caption"
-        android:layout_width="60pt"
+        android:layout_width="50pt"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/fragment_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/cart_item_price"
-        android:layout_width="30pt"
+        android:layout_width="40pt"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
         android:paddingHorizontal="@dimen/fragment_horizontal_margin"

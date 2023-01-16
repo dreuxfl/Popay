@@ -11,13 +11,74 @@
     android:paddingBottom="@dimen/fragment_vertical_margin"
     tools:context=".LoginFragment">
 
+    <TextView
+        android:id="@+id/cart_item_caption"
+        android:layout_width="50pt"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/fragment_horizontal_margin"
+        android:text="Name"
+        android:textStyle="bold"
+
+        app:layout_constraintEnd_toStartOf="@+id/cart_item_price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cart_item_price"
+        android:layout_width="40pt"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textStyle="bold"
+
+        android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
+        android:paddingHorizontal="@dimen/fragment_horizontal_margin"
+        app:layout_constraintEnd_toStartOf="@+id/cart_item_quantity"
+        app:layout_constraintStart_toEndOf="@+id/cart_item_caption"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cart_item_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
+        android:layout_weight="1"
+        android:text="Quantity"
+        android:textStyle="bold"
+
+        app:layout_constraintStart_toEndOf="@+id/cart_item_price"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_list"
         android:layout_width="0dp"
-        android:layout_height="590dp"
+        android:layout_height="560dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cart_item_total_quantity_tooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="68dp"
+        android:paddingHorizontal="@dimen/fragment_horizontal_margin"
+        android:text="Prix total"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/cart_item_total_quantity_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="68dp"
+        android:paddingHorizontal="@dimen/fragment_horizontal_margin"
+        android:text="99999.99"
+        android:tooltipText="Prix total : "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cart_item_total_quantity_tooltip" />
 
     <Button
         android:id="@+id/nfc_btn"
