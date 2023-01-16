@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="30pt"
     android:orientation="horizontal"
     android:paddingTop="@dimen/fragment_vertical_margin_small"
     android:paddingBottom="@dimen/fragment_vertical_margin_small">
@@ -50,13 +50,25 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
-        android:layout_marginEnd="@dimen/fragment_horizontal_margin_small"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/details"
         app:layout_constraintStart_toEndOf="@+id/cart_payment_time"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.502" />
 
+    <TextView
+        android:id="@+id/details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4pt"
+        android:text="Details >>"
+        android:textColor="@color/gold"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

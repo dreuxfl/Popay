@@ -42,10 +42,10 @@ class ProductPopup: AppCompatActivity() {
 
         val productName = findViewById<TextView>(R.id.popup_window_productname)
         val description = findViewById<TextView>(R.id.popup_window_productDesc)
-        val price = findViewById<TextView>(R.id.popup_window_price)
-        val quantite = findViewById<EditText>(R.id.popup_window_quantite)
-        val plus = findViewById<ImageButton>(R.id.popup_window_quantitePlus)
-        val moins = findViewById<ImageButton>(R.id.popup_window_QuantiteMoins)
+        val price = findViewById<TextView>(R.id.text_price)
+        val quantite = findViewById<EditText>(R.id.edit_text_quantite_value)
+        val plus = findViewById<ImageButton>(R.id.button_plus)
+        val moins = findViewById<ImageButton>(R.id.button_minus)
         val confirmBtn = findViewById<Button>(R.id.popup_window_button)
         val viewWithBorder = findViewById<CardView>(R.id.popup_window_view_with_border)
         val viewBackground = findViewById<ConstraintLayout>(R.id.popup_window_background)
@@ -103,12 +103,9 @@ class ProductPopup: AppCompatActivity() {
                 }
             }
 
-
             queue.add(postProduct)
-
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-
             finish()
 
 
@@ -146,10 +143,10 @@ class ProductPopup: AppCompatActivity() {
     override fun onBackPressed() {
         val viewBackground = findViewById<CardView>(R.id.popup_window_background)
         val viewWithBorder = findViewById<CardView>(R.id.popup_window_view_with_border)
-        val alpha = 100 // between 0-255
+        val alpha = 100
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), alphaColor, Color.TRANSPARENT)
-        colorAnimation.duration = 500 // milliseconds
+        colorAnimation.duration = 500
         colorAnimation.addUpdateListener { animator ->
             viewBackground.setBackgroundColor(
                 animator.animatedValue as Int
