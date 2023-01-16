@@ -34,7 +34,6 @@ class LoginFragment : Fragment() {
     ): View? {
 
         baseUrl = context?.getString(R.string.baseUrl)
-
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
 
