@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -24,8 +25,8 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
         val cartItemCaption: TextView = view.findViewById(R.id.cart_item_caption)
         val cartItemPrice: TextView = view.findViewById(R.id.cart_item_price)
         val cartItemQuantity: TextView = view.findViewById(R.id.cart_item_quantity)
-        val addBtn: Button = view.findViewById(R.id.cart_item_plus)
-        val minusBtn: Button = view.findViewById(R.id.cart_item_minus)
+        val addBtn: AppCompatImageButton = view.findViewById(R.id.cart_item_plus)
+        val minusBtn: AppCompatImageButton  = view.findViewById(R.id.cart_item_minus)
 
     }
 
