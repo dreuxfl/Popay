@@ -135,7 +135,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
 
                         val queue = Volley.newRequestQueue(this@QRCodeScannerActivity)
                         val jsonObjectRequest : JsonObjectRequest = object : JsonObjectRequest(
-                            "/product/$scannedValue",
+                            "$baseUrl/product/$scannedValue",
                             null,
                             { response ->
                                 val product = Product(
