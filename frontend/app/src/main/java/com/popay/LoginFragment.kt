@@ -24,16 +24,19 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val token : SharedPreferences? = null
     private var baseUrl : String? = null
+    private val token : SharedPreferences? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         baseUrl = context?.getString(R.string.baseUrl)
+
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+
 
         val regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$".toRegex()
         binding.loginEmail.doOnTextChanged { _, _, _, _ ->

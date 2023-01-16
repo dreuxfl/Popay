@@ -1,6 +1,8 @@
 package com.popay
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -31,13 +33,18 @@ class QRCodeScannerActivity : AppCompatActivity() {
     private lateinit var cameraSource: CameraSource
     private lateinit var barcodeDetector: BarcodeDetector
     private var scannedValue = ""
+    private var baseUrl : String? = null
     private lateinit var binding: QrcodeScannerBinding
+    private var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = QrcodeScannerBinding.inflate(layoutInflater)
         val view = binding.root
+        baseUrl = this.getString(R.string.baseUrl)
         setContentView(view)
+        val sharedPreferences: SharedPreferences = getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+        token = sharedPreferences.getString("token", null).toString()
 
         if (ContextCompat.checkSelfPermission(
                 this@QRCodeScannerActivity, android.Manifest.permission.CAMERA
@@ -65,16 +72,24 @@ class QRCodeScannerActivity : AppCompatActivity() {
             .build()
 
         binding.cameraSurfaceView.holder.addCallback(object : SurfaceHolder.Callback {
-            @SuppressLint("MissingPermission")
+
             override fun surfaceCreated(holder: SurfaceHolder) {
                 try {
+                    if (ActivityCompat.checkSelfPermission(
+                            this@QRCodeScannerActivity,
+                            Manifest.permission.CAMERA
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        Toast.makeText(this@QRCodeScannerActivity, "You need the give the necessary permissions", Toast.LENGTH_SHORT).show()
+                        return
+                    }
                     cameraSource.start(holder)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
 
-            @SuppressLint("MissingPermission")
+
             override fun surfaceChanged(
                 holder: SurfaceHolder,
                 format: Int,
@@ -82,6 +97,14 @@ class QRCodeScannerActivity : AppCompatActivity() {
                 height: Int
             ) {
                 try {
+                    if (ActivityCompat.checkSelfPermission(
+                            this@QRCodeScannerActivity,
+                            Manifest.permission.CAMERA
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        Toast.makeText(this@QRCodeScannerActivity, "You need the give the necessary permissions", Toast.LENGTH_SHORT).show()
+                        return
+                    }
                     cameraSource.start(holder)
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -109,11 +132,10 @@ class QRCodeScannerActivity : AppCompatActivity() {
 
                     runOnUiThread {
                         cameraSource.stop()
-                        Toast.makeText(this@QRCodeScannerActivity, "value: $scannedValue", Toast.LENGTH_SHORT).show()
-                        finish()
+
                         val queue = Volley.newRequestQueue(this@QRCodeScannerActivity)
-                        val jsonObjectRequest = JsonObjectRequest(
-                            "http://10.136.76.77:8080/api/product/$scannedValue",
+                        val jsonObjectRequest : JsonObjectRequest = object : JsonObjectRequest(
+                            "/product/$scannedValue",
                             null,
                             { response ->
                                 val product = Product(
@@ -129,9 +151,15 @@ class QRCodeScannerActivity : AppCompatActivity() {
                             { error ->
                                 println("Err $error")
                             }
-                        )
+                        ){
+                            override fun getHeaders(): MutableMap<String, String> {
+                                val params2: MutableMap<String, String> = HashMap()
+                                params2["Authorization"] = "Bearer $token"
+                                return params2
+                            }
+                        }
                         queue.add(jsonObjectRequest)
-
+                        finish()
                     }
                 }else
                 {
