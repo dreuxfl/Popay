@@ -86,7 +86,6 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
             object : JsonObjectRequest(
                 Method.POST, url, JSONObject((params as Map<*, *>?)!!),
                 { response ->
-
                     CartItems[position].quantity -= 1
                     holder.cartItemQuantity.text = CartItems[position].quantity.toString()
                     holder.cartItemPrice.text = String.format("%.2f", (CartItems[position].price * CartItems[position].quantity)) + "€"

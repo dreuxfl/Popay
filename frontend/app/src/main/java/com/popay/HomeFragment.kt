@@ -36,10 +36,16 @@ class HomeFragment : Fragment() {
 
         baseUrl = context?.getString(R.string.baseUrl)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val placeholder = binding!!.PlaceHolder
 
         cartListRecyclerView = binding!!.cartList
 
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
+        if (cartList.isEmpty()) {
+            placeholder.visibility = View.VISIBLE
+        } else {
+            placeholder.visibility = View.GONE
+        }
 
 
 
