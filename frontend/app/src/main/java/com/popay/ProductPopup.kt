@@ -103,12 +103,9 @@ class ProductPopup: AppCompatActivity() {
                 }
             }
 
-
             queue.add(postProduct)
-
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-
             finish()
 
 
@@ -146,10 +143,10 @@ class ProductPopup: AppCompatActivity() {
     override fun onBackPressed() {
         val viewBackground = findViewById<CardView>(R.id.popup_window_background)
         val viewWithBorder = findViewById<CardView>(R.id.popup_window_view_with_border)
-        val alpha = 100 // between 0-255
+        val alpha = 100
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), alphaColor, Color.TRANSPARENT)
-        colorAnimation.duration = 500 // milliseconds
+        colorAnimation.duration = 500
         colorAnimation.addUpdateListener { animator ->
             viewBackground.setBackgroundColor(
                 animator.animatedValue as Int
