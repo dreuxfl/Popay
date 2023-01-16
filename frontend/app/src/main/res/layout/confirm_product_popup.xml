@@ -9,7 +9,6 @@
     android:textAlignment="center"
     tools:context=".ProductPopup">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/popup_window_view_with_border"
         android:layout_width="322dp"
