@@ -61,7 +61,6 @@ class CreditFragment : Fragment() {
                         val cartId = response.getJSONObject(i).getInt("id")
                         val cartPrice = response.getJSONObject(i).getDouble("totalAmount")
                         val dateString = response.getJSONObject(i).getString("paymentDate").format()
-                        println(dateString)
                         val paymentDate = LocalDateTime.parse(dateString)
                         carts.add(Cart(cartId, paymentDate, cartPrice))
                     }

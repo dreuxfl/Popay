@@ -1,5 +1,6 @@
 package com.popay
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,11 +28,12 @@ class CartsHistoryAdapter(private val CartItems: ArrayList<Cart>) :
 
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.cartId.text = CartItems[position].id.toString()
             holder.cartPaymentDate.text = CartItems[position].date.toLocalDate().toString()
             holder.cartPaymentTime.text = CartItems[position].date.toLocalTime().format(
-                DateTimeFormatter.ofPattern("HH:mm:ss")).toString()
+                DateTimeFormatter.ofPattern("HH:mm")).toString()
             holder.cartPrice.text = String.format("%.2f", CartItems[position].price) + "€"
         }
 

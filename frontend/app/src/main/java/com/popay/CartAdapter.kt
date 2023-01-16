@@ -3,15 +3,12 @@ package com.popay
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.popay.entities.Product
@@ -39,6 +36,7 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         baseUrl = holder.itemView.context.getString(R.string.baseUrl)
@@ -87,6 +85,7 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
             object : JsonObjectRequest(
                 Method.POST, url, JSONObject((params as Map<*, *>?)!!),
                 { response ->
+
                     CartItems[position].quantity -= 1
                     holder.cartItemQuantity.text = CartItems[position].quantity.toString()
                     holder.cartItemPrice.text = String.format("%.2f", (CartItems[position].price * CartItems[position].quantity)) + "€"

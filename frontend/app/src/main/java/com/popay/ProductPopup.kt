@@ -4,18 +4,17 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -29,13 +28,10 @@ class ProductPopup: AppCompatActivity() {
 
 
     private var popupText = ""
-    private var popupBtnPlus = ""
-    private var popupBtnMoins = ""
-    private var popupButton = ""
-    private var darkStatusBar = false
     private var popUpproduct: Product? = null
     private var token = ""
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
@@ -93,12 +89,11 @@ class ProductPopup: AppCompatActivity() {
                 Method.POST, urlPostProduct, JSONObject((params as Map<*, *>?)!!), { response1 ->
                     if (response1.getBoolean("success")) {
                         Toast.makeText(this, "Product Posted", Toast.LENGTH_LONG).show()
-                        finish()
                     } else {
-                        Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Product Post Failed", Toast.LENGTH_LONG).show()
                     }
                 }, {
-                    Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "No response from server", Toast.LENGTH_LONG).show()
                 }
             ) {
                 override fun getHeaders(): MutableMap<String, String> {
@@ -108,41 +103,14 @@ class ProductPopup: AppCompatActivity() {
                 }
             }
 
-            val urlCreateCart = "http://10.136.76.77:8080/api/cart"
-            val postCart : JsonObjectRequest = object : JsonObjectRequest(
-                Method.POST, urlCreateCart, JSONObject(), { response1 ->
-                    Log.d("RESPONSE GET CART",response1.toString())
-                }, {
 
-                }
-            ) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    val params2: MutableMap<String, String> = HashMap()
-                    params2["Authorization"] = "Bearer $token"
-                    return params2
-                }
-            }
-
-            val urlCheckCart = "http://10.136.76.77:8080/api/cart"
-            val getCurrentCart : JsonObjectRequest = object : JsonObjectRequest(
-                Method.GET, urlCheckCart, JSONObject(), { response1 ->
-
-
-                }, {
-                    queue.add(postCart)
-
-
-                }
-            ) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    val params2: MutableMap<String, String> = HashMap()
-                    params2["Authorization"] = "Bearer $token"
-                    return params2
-                }
-            }
-            queue.add(getCurrentCart)
             queue.add(postProduct)
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
             finish()
+
 
         }
 
@@ -152,7 +120,7 @@ class ProductPopup: AppCompatActivity() {
         val alpha = 100
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), Color.TRANSPARENT, alphaColor)
-        colorAnimation.duration = 500 // milliseconds
+        colorAnimation.duration = 500
         colorAnimation.addUpdateListener { animator ->
             viewBackground.setBackgroundColor(animator.animatedValue as Int)
         }
@@ -161,8 +129,6 @@ class ProductPopup: AppCompatActivity() {
         viewWithBorder.animate().alpha(1f).setDuration(500).setInterpolator(
             DecelerateInterpolator()
         ).start()
-
-
     }
 
     private fun setWindowFlag(activity: Activity, on: Boolean) {

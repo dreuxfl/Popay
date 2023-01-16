@@ -1,5 +1,6 @@
 package com.popay
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,9 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.popay.databinding.FragmentHomeBinding
 import com.popay.entities.Product
+import org.json.JSONObject
 
 class HomeFragment : Fragment() {
 
@@ -35,17 +38,22 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         cartListRecyclerView = binding!!.cartList
+
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
+
+
 
         binding!!.scanBtn.setOnClickListener {
             val intent = Intent (activity, QRCodeScannerActivity::class.java)
             activity?.startActivity(intent)
+            activity?.finish()
         }
 
 
         binding!!.nfcBtn.setOnClickListener {
             val intent = Intent (activity, NfcReaderActivity::class.java)
             activity?.startActivity(intent)
+            activity?.finish()
         }
 
         return binding!!.root
@@ -55,6 +63,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getUserData()
     }
+
 
     private fun getUserData() {
         val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
@@ -76,8 +85,8 @@ class HomeFragment : Fragment() {
                         val cartItemStock = response.getJSONObject(i).getInt("quantity")
                         cartList.add(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
                     }
-                    println(cartList)
                     cartListRecyclerView.adapter = CartAdapter(cartList)
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(context, "Fatal error, call dev", Toast.LENGTH_LONG).show()
@@ -94,7 +103,43 @@ class HomeFragment : Fragment() {
                 return params
             }
         }
-        queue.add(arrayRequest)
+
+
+        val urlCreateCart = "$baseUrl/cart"
+        val postCart : JsonObjectRequest = object : JsonObjectRequest(
+            Method.POST, urlCreateCart, JSONObject(), { response1 ->
+                queue.add(arrayRequest)
+                Log.d("RESPONSE POST CART",response1.toString())
+            }, {
+                Log.d("ERROR POST CART", it.toString())
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params2: MutableMap<String, String> = HashMap()
+                params2["Authorization"] = "Bearer $token"
+                return params2
+            }
+        }
+
+        val urlCheckCart = "$baseUrl/cart"
+        val getCurrentCart : JsonObjectRequest = object : JsonObjectRequest(
+            Method.GET, urlCheckCart, null, { response1 ->
+                queue.add(arrayRequest)
+                Log.d("RESPONSE GET CART",response1.toString())
+            }, {
+                queue.add(postCart)
+                queue.add(arrayRequest)
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params2: MutableMap<String, String> = HashMap()
+                params2["Authorization"] = "Bearer $token"
+                return params2
+            }
+        }
+        queue.add(getCurrentCart)
+
+
 
     }
 }
