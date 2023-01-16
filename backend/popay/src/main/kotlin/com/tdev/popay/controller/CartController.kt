@@ -98,7 +98,7 @@ class CartController(
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
-                val cart = cartService.findOnePayedCartsByUserId(id, userId)
+                val cart = cartService.findOnePayedCartsByUserId(userId, id)
                 if (cart != null) {
                     val cartProducts = cartProductService.findAllByCartId(cart.id)
                     for (cartProduct in cartProducts) {
