@@ -70,13 +70,36 @@ class CartProductController(
     }
 
     @GetMapping("/cart_products")
-    fun getCartProducts(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
+    fun getCurrentCartProducts(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
         val userId = tokenService.getUserIdFromToken(token)
         if (userId != null) {
             val checkCart = cartService.findCurrentCartByUserId(userId)
             if (checkCart != null) {
-                val checkCartProduct = cartProductService.findAllByCartId(checkCart.id)
-                return ResponseEntity(checkCartProduct, HttpStatus.OK)
+                val checkCartProducts = cartProductService.findAllByCartId(checkCart.id)
+                for (cartProducts in checkCartProducts) {
+                    cartProducts.cart?.totalAmount = cartProducts.cart?.totalAmount?.plus((cartProducts.product?.price ?: 0.0) * cartProducts.quantity)!!
+                }
+                return ResponseEntity(checkCartProducts, HttpStatus.OK)
+            }
+            return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
+        }
+        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
+    }
+
+    @GetMapping("/cart_products/{cart_id}")
+    fun getCartProductsByCartId(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable(value = "cart_id") cartId: Long
+    ): ResponseEntity<Any> {
+        val userId = tokenService.getUserIdFromToken(token)
+        if (userId != null) {
+            val checkCart = cartService.findOnePayedCartsByUserId(userId, cartId)
+            if (checkCart != null) {
+                val checkCartProducts = cartProductService.findAllByCartId(checkCart.id)
+                for (cartProducts in checkCartProducts) {
+                    cartProducts.cart?.totalAmount = cartProducts.cart?.totalAmount?.plus((cartProducts.product?.price ?: 0.0) * cartProducts.quantity)!!
+                }
+                return ResponseEntity(checkCartProducts, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
         }
