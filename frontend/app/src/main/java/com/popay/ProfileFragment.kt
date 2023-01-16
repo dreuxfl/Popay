@@ -69,7 +69,7 @@ class ProfileFragment : Fragment() {
                 binding.profilePassword1Layout.error.isNullOrEmpty() &&
                 binding.profileFullNameLayout.error.isNullOrEmpty()
 
-            ) { //if no error send request
+            ) {
                 val queue = Volley.newRequestQueue(context)
                 val params = HashMap<String, String>()
                 params["email"] = binding.profileEmail.text.toString()

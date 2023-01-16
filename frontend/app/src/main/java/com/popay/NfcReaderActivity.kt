@@ -119,7 +119,7 @@ class NfcReaderActivity : AppCompatActivity()
                     if (response.getBoolean("success")) {
                         queue.add(CartValidationRequest)
                     } else {
-                        Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Payment failed, Invalid Credit Card", Toast.LENGTH_LONG).show()
                     }
                 },
                 { error ->
