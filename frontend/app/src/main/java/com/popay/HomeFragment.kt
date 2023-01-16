@@ -46,13 +46,14 @@ class HomeFragment : Fragment() {
         binding!!.scanBtn.setOnClickListener {
             val intent = Intent (activity, QRCodeScannerActivity::class.java)
             activity?.startActivity(intent)
-
+            activity?.finish()
         }
 
 
         binding!!.nfcBtn.setOnClickListener {
             val intent = Intent (activity, NfcReaderActivity::class.java)
             activity?.startActivity(intent)
+            activity?.finish()
         }
 
         return binding!!.root
