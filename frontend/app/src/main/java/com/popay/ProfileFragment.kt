@@ -77,8 +77,10 @@ class ProfileFragment : Fragment() {
                 params["firstName"] = binding.profileFullName.text.toString().split(" ")[0]
                 params["lastName"] = binding.profileFullName.text.toString().split(" ")[1]
                 val jsonObject = JSONObject(params as Map<*, *>)
-                val stringRequest = JsonObjectRequest(
-                    Request.Method.PUT,
+                val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+                val token = sharedPreferences?.getString("token", null)
+                val stringRequest = JsonObjectRequest = object : JsonObjectRequest(
+                    Method.PUT,
                     "$baseUrl/user",
                     jsonObject,
                     { response ->
@@ -90,14 +92,21 @@ class ProfileFragment : Fragment() {
                         }
                     },
                     {
+                        Toast.makeText(context, "Profile edit error", Toast.LENGTH_SHORT).show()
                         println("profile ERRR $it ${it.networkResponse} ${jsonObject.toString()}")
 
                     }
-                )
+                ){
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val params: MutableMap<String, String> = HashMap()
+                        params["Authorization"] = "Bearer $token"
+                        return params
+                    }
+                }
                 queue.add(stringRequest)
 
             } else {
-                Toast.makeText(context, "profile failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "All fields must be filled in", Toast.LENGTH_LONG).show()
             }
         }
         return binding.root
@@ -113,15 +122,16 @@ class ProfileFragment : Fragment() {
         val token = sharedPreferences?.getString("token", null)
         val queue = Volley.newRequestQueue(context)
 
-        val arrayRequest : JsonObjectRequest = object : JsonObjectRequest(
+        val fetchRequest : JsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
-            "$baseUrl/profile",
+            "$baseUrl/user",
             null,
             { response ->
                 try{
 
                     binding.profileEmail.setText(response.getString("email").toString())
-                    binding.profileFullName.setText("${response.getJSONObject("firstName")} ${response.getString("lastName")}")
+                    val fullName = "${response.getString("firstName")} ${response.getString("lastName")}"
+                    binding.profileFullName.setText(fullName)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(context, "Fatal error, call dev", Toast.LENGTH_LONG).show()
@@ -129,16 +139,16 @@ class ProfileFragment : Fragment() {
             },
             {
                 println("ERRR ${it}")
-            },
+            }
 
-            ) {
+        ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val params: MutableMap<String, String> = HashMap()
                 params["Authorization"] = "Bearer $token"
                 return params
             }
         }
-        queue.add(arrayRequest)
+        queue.add(fetchRequest)
 
     }
 
