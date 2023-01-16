@@ -8,14 +8,12 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -39,10 +37,10 @@ class ProductPopup: AppCompatActivity() {
 
         val productName = findViewById<TextView>(R.id.popup_window_productname)
         val description = findViewById<TextView>(R.id.popup_window_productDesc)
-        val price = findViewById<TextView>(R.id.popup_window_price)
-        val quantite = findViewById<EditText>(R.id.popup_window_quantite)
-        val plus = findViewById<ImageButton>(R.id.popup_window_quantitePlus)
-        val moins = findViewById<ImageButton>(R.id.popup_window_QuantiteMoins)
+        val price = findViewById<TextView>(R.id.text_price)
+        val quantite = findViewById<EditText>(R.id.edit_text_quantite_value)
+        val plus = findViewById<ImageButton>(R.id.button_plus)
+        val moins = findViewById<ImageButton>(R.id.button_minus)
         val confirmBtn = findViewById<Button>(R.id.popup_window_button)
         val viewWithBorder = findViewById<CardView>(R.id.popup_window_view_with_border)
         val viewBackground = findViewById<ConstraintLayout>(R.id.popup_window_background)
