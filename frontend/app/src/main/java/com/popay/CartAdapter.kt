@@ -21,6 +21,19 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
 
     private var baseUrl : String? = null
 
+    private var listener: UpdateTotalQuantityListener? = null
+
+    fun setUpdateTotalQuantityListener(listener: UpdateTotalQuantityListener) {
+        this.listener = listener
+    }
+
+
+    interface UpdateTotalQuantityListener {
+        fun onTotalQuantityUpdate(totalQuantity: Double)
+    }
+
+
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val cartItemCaption: TextView = view.findViewById(R.id.cart_item_caption)
         val cartItemPrice: TextView = view.findViewById(R.id.cart_item_price)
@@ -62,6 +75,11 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
                     CartItems[position].quantity += 1
                     holder.cartItemQuantity.text = CartItems[position].quantity.toString()
                     holder.cartItemPrice.text = String.format("%.2f", (CartItems[position].price * CartItems[position].quantity)) + "€"
+                    var totalQuantity = 0.0
+                    for (product in CartItems) {
+                        totalQuantity += product.price * product.quantity
+                    }
+                    listener?.onTotalQuantityUpdate(totalQuantity)
                 },
                 {
                     println("ERRR ${it}")
@@ -89,6 +107,11 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
                     CartItems[position].quantity -= 1
                     holder.cartItemQuantity.text = CartItems[position].quantity.toString()
                     holder.cartItemPrice.text = String.format("%.2f", (CartItems[position].price * CartItems[position].quantity)) + "€"
+                    var totalQuantity = 0.0
+                    for (product in CartItems) {
+                        totalQuantity += product.price * product.quantity
+                    }
+                    listener?.onTotalQuantityUpdate(totalQuantity)
                 },
                 {
                     println("ERRR ${it}")
@@ -107,5 +130,13 @@ class CartAdapter(private val CartItems: ArrayList<Product>) :
     }
     override fun getItemCount(): Int {
         return CartItems.size
+    }
+
+    fun getTotalAmount(): Double {
+        var totalAmount = 0.0
+        for (item in CartItems) {
+            totalAmount += item.price * item.quantity
+        }
+        return totalAmount
     }
 }

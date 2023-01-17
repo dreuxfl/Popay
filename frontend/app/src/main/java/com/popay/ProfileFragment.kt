@@ -1,6 +1,7 @@
 package com.popay
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -62,6 +63,12 @@ class ProfileFragment : Fragment() {
             binding.editProfile.isEnabled = true
         }
 
+        binding.logout.setOnClickListener{
+            logout()
+        }
+
+
+
         binding.editProfile.setOnClickListener {
             if(
                 binding.profileEmailLayout.error.isNullOrEmpty() &&
@@ -77,8 +84,10 @@ class ProfileFragment : Fragment() {
                 params["firstName"] = binding.profileFullName.text.toString().split(" ")[0]
                 params["lastName"] = binding.profileFullName.text.toString().split(" ")[1]
                 val jsonObject = JSONObject(params as Map<*, *>)
-                val stringRequest = JsonObjectRequest(
-                    Request.Method.PUT,
+                val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+                val token = sharedPreferences?.getString("token", null)
+                val stringRequest = object : JsonObjectRequest(
+                    Method.PUT,
                     "$baseUrl/user",
                     jsonObject,
                     { response ->
@@ -90,16 +99,26 @@ class ProfileFragment : Fragment() {
                         }
                     },
                     {
+                        Toast.makeText(context, "Profile edit error", Toast.LENGTH_SHORT).show()
                         println("profile ERRR $it ${it.networkResponse} ${jsonObject.toString()}")
 
                     }
-                )
+                ){
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val params1: MutableMap<String, String> = HashMap()
+                        params1["Authorization"] = "Bearer $token"
+                        return params
+                    }
+                }
                 queue.add(stringRequest)
 
+
             } else {
-                Toast.makeText(context, "profile failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "All fields must be filled in", Toast.LENGTH_LONG).show()
             }
         }
+
+
         return binding.root
     }
 
@@ -108,20 +127,32 @@ class ProfileFragment : Fragment() {
         getUserData()
     }
 
+    fun logout(){
+        println("logout")
+        val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.remove("token")
+        editor?.apply()
+        val intent = Intent(context, AuthActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
+    }
+
     private fun getUserData() {
         val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", null)
         val queue = Volley.newRequestQueue(context)
 
-        val arrayRequest : JsonObjectRequest = object : JsonObjectRequest(
+        val fetchRequest : JsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
-            "$baseUrl/profile",
+            "$baseUrl/user",
             null,
             { response ->
                 try{
 
                     binding.profileEmail.setText(response.getString("email").toString())
-                    binding.profileFullName.setText("${response.getJSONObject("firstName")} ${response.getString("lastName")}")
+                    val fullName = "${response.getString("firstName")} ${response.getString("lastName")}"
+                    binding.profileFullName.setText(fullName)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(context, "Fatal error, call dev", Toast.LENGTH_LONG).show()
@@ -129,16 +160,16 @@ class ProfileFragment : Fragment() {
             },
             {
                 println("ERRR ${it}")
-            },
+            }
 
-            ) {
+        ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val params: MutableMap<String, String> = HashMap()
                 params["Authorization"] = "Bearer $token"
                 return params
             }
         }
-        queue.add(arrayRequest)
+        queue.add(fetchRequest)
 
     }
 

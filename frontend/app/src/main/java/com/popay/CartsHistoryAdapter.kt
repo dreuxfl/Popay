@@ -16,7 +16,6 @@ class CartsHistoryAdapter(private val CartItems: ArrayList<Cart>) :
 
 
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-        val cartId: TextView = view.findViewById(R.id.cart_id)
         val cartPaymentDate: TextView = view.findViewById(R.id.cart_payment_date)
         val cartPrice: TextView = view.findViewById(R.id.cart_price)
         val cartPaymentTime: TextView = view.findViewById(R.id.cart_payment_time)
@@ -32,7 +31,6 @@ class CartsHistoryAdapter(private val CartItems: ArrayList<Cart>) :
 
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.cartId.text = CartItems[position].id.toString()
             holder.cartPaymentDate.text = CartItems[position].date.toLocalDate().toString()
             holder.cartPaymentTime.text = CartItems[position].date.toLocalTime().format(
                 DateTimeFormatter.ofPattern("HH:mm")).toString()

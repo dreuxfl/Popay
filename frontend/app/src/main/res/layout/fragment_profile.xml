@@ -142,4 +142,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_full_name_layout" />
 
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="176dp"
+        android:layout_height="48dp"
+        android:layout_gravity="start"
+        android:backgroundTint="#F44336"
+        android:elevation="5dp"
+        android:text="LOGOUT"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="@dimen/fragment_corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

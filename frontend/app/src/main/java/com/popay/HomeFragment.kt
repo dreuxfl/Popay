@@ -20,7 +20,7 @@ import com.popay.databinding.FragmentHomeBinding
 import com.popay.entities.Product
 import org.json.JSONObject
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), CartAdapter.UpdateTotalQuantityListener {
 
     private var binding: FragmentHomeBinding? = null
 
@@ -28,6 +28,7 @@ class HomeFragment : Fragment() {
     private val token : SharedPreferences? = null
     private var baseUrl : String? = null
     private var cartList : ArrayList<Product> = ArrayList()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +40,7 @@ class HomeFragment : Fragment() {
         val placeholder = binding!!.PlaceHolder
 
         cartListRecyclerView = binding!!.cartList
+
 
         cartListRecyclerView.layoutManager = LinearLayoutManager(context)
         if (cartList.isEmpty()) {
@@ -65,6 +67,7 @@ class HomeFragment : Fragment() {
         return binding!!.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getUserData()
@@ -76,13 +79,15 @@ class HomeFragment : Fragment() {
         val token = sharedPreferences?.getString("token", null)
         val queue = Volley.newRequestQueue(context)
 
-        val arrayRequest : JsonArrayRequest = object : JsonArrayRequest(
+        val arrayRequest : JsonArrayRequest = @SuppressLint("SetTextI18n")
+        object : JsonArrayRequest(
             Method.GET,
             "$baseUrl/cart_products",
             null,
             { response ->
                 try{
                     cartList = arrayListOf()
+                    binding!!.cartItemTotalQuantityValue.text = String.format("%.2f", response.getJSONObject(0).getJSONObject("cart").getDouble("totalAmount")) + "€"
                     for(i in 0 until response.length()){
                         val cartItemProduct = response.getJSONObject(i).getJSONObject("product")
                         val cartItemId = cartItemProduct.getInt("id")
@@ -91,7 +96,10 @@ class HomeFragment : Fragment() {
                         val cartItemStock = response.getJSONObject(i).getInt("quantity")
                         cartList.add(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
                     }
-                    cartListRecyclerView.adapter = CartAdapter(cartList)
+                    val adapter = CartAdapter(cartList)
+                    adapter.setUpdateTotalQuantityListener(this)
+                    cartListRecyclerView.adapter = adapter
+
 
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -147,5 +155,9 @@ class HomeFragment : Fragment() {
 
 
 
+    }
+
+    override fun onTotalQuantityUpdate(totalQuantity: Double) {
+        binding?.cartItemTotalQuantityValue?.text = String.format("%.2f", totalQuantity) + "€"
     }
 }
