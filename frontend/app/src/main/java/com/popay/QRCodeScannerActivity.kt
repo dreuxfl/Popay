@@ -191,6 +191,16 @@ class QRCodeScannerActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this@QRCodeScannerActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+
+
     override fun onDestroy() {
         super.onDestroy()
         cameraSource.stop()
