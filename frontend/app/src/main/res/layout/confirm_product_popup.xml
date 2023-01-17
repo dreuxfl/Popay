@@ -11,8 +11,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/popup_window_view_with_border"
-        android:layout_width="322dp"
-        android:layout_height="541dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         app:cardBackgroundColor="#FFFFFF"
@@ -48,34 +48,17 @@
                 android:textSize="20sp"
                 app:autoSizeMaxTextSize="24dp"
                 app:autoSizeTextType="uniform"
-                app:layout_constraintBottom_toTopOf="@+id/popup_window_productImage"
+                app:layout_constraintBottom_toTopOf="@+id/popup_window_productname"
                 app:layout_constraintDimensionRatio=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/popup_window_productImage"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/popup_window_productDesc"
-                app:layout_constraintEnd_toStartOf="@+id/popup_window_productname"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popup_window_title"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@android:drawable/ic_menu_gallery" />
-
             <TextView
                 android:id="@+id/popup_window_productname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="Text"
@@ -85,7 +68,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/popup_window_productDesc"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/popup_window_productImage"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/popup_window_title" />
 
             <TextView
@@ -93,13 +76,15 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="Description"
                 android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toTopOf="@+id/text_quantity"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popup_window_productImage" />
+                app:layout_constraintTop_toBottomOf="@+id/popup_window_productname" />
 
             <ImageButton
                 android:id="@+id/button_plus"
@@ -124,27 +109,25 @@
                 android:layout_height="48dp"
                 android:background="@drawable/circle"
                 android:contentDescription="@string/tab_text_1"
-                app:iconTint="@color/white"
                 app:cornerRadius="@dimen/fragment_corner_radius"
-                app:rippleColor="@color/gold"
+                app:iconTint="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
                 app:layout_constraintEnd_toStartOf="@+id/edit_text_quantite_value"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_quantity"
                 app:layout_constraintVertical_bias="0.0"
+                app:rippleColor="@color/gold"
                 app:srcCompat="@drawable/ic_baseline_remove_24" />
 
             <TextView
                 android:id="@+id/text_quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@string/quantity_text"
                 android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toTopOf="@+id/edit_text_quantite_value"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popup_window_productDesc" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/edit_text_quantite_value"
@@ -155,11 +138,9 @@
                 android:text="1"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
-                app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
                 app:layout_constraintEnd_toStartOf="@+id/button_plus"
                 app:layout_constraintStart_toEndOf="@+id/button_minus"
-                app:layout_constraintTop_toBottomOf="@+id/text_quantity"
-                app:layout_constraintVertical_bias="0.0" />
+                tools:layout_editor_absoluteY="430dp" />
 
             <TextView
                 android:id="@+id/text_price"
@@ -179,12 +160,12 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/popup_window_button"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/fragment_button_height"
                 android:layout_marginBottom="16dp"
-                android:background="@color/cyber_yellow"
+                android:backgroundTint="@color/cyber_yellow"
                 android:text="@string/add_to_cart_btn_text"
-                android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:cornerRadius="@dimen/fragment_corner_radius"
                 app:iconTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
