@@ -9,15 +9,14 @@
     android:textAlignment="center"
     tools:context=".ProductPopup">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/popup_window_view_with_border"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="3dp"
+        app:cardBackgroundColor="@color/onyx"
+        app:cardCornerRadius="@dimen/fragment_corner_radius"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
         app:cardPreventCornerOverlap="false"
@@ -27,184 +26,159 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".ProductPopup">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/popup_window_view"
-            android:layout_width="wrap_content"
-            android:layout_height="377dp"
-            android:layout_centerInParent="true"
-            android:layout_margin="2dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:cardPreventCornerOverlap="false">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/popup_window_background_container"
-                android:layout_width="250dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:background="#998d25"
-                android:minHeight="170dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/popup_window_background_container"
+            android:layout_width="150pt"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/popup_window_productname"
-                    android:layout_width="148dp"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="center"
-                    android:text="Text"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.918"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/popup_window_title"
-                    app:layout_constraintVertical_bias="0.069" />
+            <TextView
+                android:id="@+id/popup_window_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/granite"
+                android:gravity="center"
+                android:text="@string/scanned_product"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                app:autoSizeMaxTextSize="24dp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toTopOf="@+id/popup_window_productname"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/popup_window_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="80dp"
-                    android:background="#bdb042"
-                    android:gravity="center"
-                    android:text="@string/produit_scann"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    app:autoSizeMaxTextSize="24dp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toTopOf="@+id/popup_window_productDesc"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/popup_window_productname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="Text"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/popup_window_productDesc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/popup_window_title" />
 
+            <TextView
+                android:id="@+id/popup_window_productDesc"
+                android:layout_width="0dp"
+                android:scrollbars="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="Description"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toTopOf="@+id/text_quantity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/popup_window_productname" />
 
-                <Button
-                    android:id="@+id/popup_window_button"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="251dp"
-                    android:layout_height="50dp"
-                    android:background="#FFEB3B"
-                    android:text="@string/ajouter_au_panier"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textColorLink="#FFEB3B"
-                    android:textSize="20sp"
-                    app:iconTint="#C5B3B3"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:rippleColor="#FFEB3B" />
+            <ImageButton
+                android:id="@+id/button_plus"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/circle"
+                android:contentDescription="@string/tab_text_2"
+                app:cornerRadius="@dimen/fragment_corner_radius"
+                app:iconTint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.215"
+                app:layout_constraintStart_toEndOf="@+id/edit_text_quantite_value"
+                app:layout_constraintTop_toBottomOf="@+id/text_quantity"
+                app:layout_constraintVertical_bias="0.32999998"
+                app:rippleColor="@color/gold"
+                app:srcCompat="@drawable/ic_baseline_add_24" />
 
-                <ImageView
-                    android:id="@+id/popup_window_productImage"
-                    android:layout_width="62dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.037"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/popup_window_title"
-                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+            <ImageButton
+                android:id="@+id/button_minus"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/circle"
+                android:contentDescription="@string/tab_text_1"
+                app:cornerRadius="@dimen/fragment_corner_radius"
+                app:iconTint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
+                app:layout_constraintEnd_toStartOf="@+id/edit_text_quantite_value"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_quantity"
+                app:layout_constraintVertical_bias="0.32999998"
+                app:rippleColor="@color/gold"
+                app:srcCompat="@drawable/ic_baseline_remove_24" />
 
-                <EditText
-                    android:id="@+id/popup_window_quantite"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="103dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:text="1"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/popup_window_QuantiteMoins"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    app:layout_constraintVertical_bias="0.101" />
+            <TextView
+                android:id="@+id/text_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/quantity_text"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toTopOf="@+id/edit_text_quantite_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/popup_window_productDesc" />
 
-                <ImageButton
-                    android:id="@+id/popup_window_quantitePlus"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="4dp"
-                    android:contentDescription="@string/tab_text_2"
-                    app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.215"
-                    app:layout_constraintStart_toEndOf="@+id/popup_window_quantite"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    app:layout_constraintVertical_bias="0.12"
-                    app:srcCompat="@android:drawable/ic_menu_add" />
+            <EditText
+                android:id="@+id/edit_text_quantite_value"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="number"
+                android:text="1"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toTopOf="@+id/text_price"
+                app:layout_constraintEnd_toStartOf="@+id/button_plus"
+                app:layout_constraintStart_toEndOf="@+id/button_minus"
+                app:layout_constraintTop_toBottomOf="@+id/text_quantity" />
 
-                <ImageButton
-                    android:id="@+id/popup_window_QuantiteMoins"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="44dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/tab_text_1"
-                    app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
-                    app:layout_constraintEnd_toStartOf="@+id/popup_window_quantite"
-                    app:layout_constraintHorizontal_bias="0.733"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    app:layout_constraintVertical_bias="0.12"
-                    app:srcCompat="@android:drawable/ic_menu_delete"
-                    tools:srcCompat="@android:drawable/presence_busy" />
+            <TextView
+                android:id="@+id/text_price"
+                android:layout_width="115dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="29.99$"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_quantite_value" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="76dp"
-                    android:text="Quantité"
-                    android:textColor="#FFFFFF"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.487"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/popup_window_productname" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/popup_window_button"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/fragment_button_height"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/cyber_yellow"
+                android:text="@string/add_to_cart_btn_text"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:cornerRadius="@dimen/fragment_corner_radius"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_price"
+                app:rippleColor="@color/gold" />
 
-                <TextView
-                    android:id="@+id/popup_window_productDesc"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="96dp"
-                    android:text="Description"
-                    android:textColor="#FFFFFF"
-                    app:layout_constraintBottom_toTopOf="@+id/popup_window_price"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/popup_window_title" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/popup_window_price"
-                    android:layout_width="115dp"
-                    android:layout_height="38dp"
-                    android:layout_marginStart="28dp"
-                    android:layout_marginBottom="64dp"
-                    android:text="29.99$"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/popup_window_QuantiteMoins"
-                    app:layout_constraintTop_toBottomOf="@+id/popup_window_productDesc" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

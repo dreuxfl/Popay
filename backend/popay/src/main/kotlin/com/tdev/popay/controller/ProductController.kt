@@ -110,25 +110,4 @@ class ProductController(
         }
         return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
     }
-
-    @DeleteMapping("/product/{id}")
-    fun removeProductById(
-        @RequestHeader("Authorization") token: String,
-        @PathVariable(value = "id") productId: Long
-    ): ResponseEntity<Any> {
-        val userId = tokenService.getUserIdFromToken(token)
-        if (userId != null) {
-            val checkUser = userService.findById(userId)
-            if (checkUser != null) {
-                val checkProduct = productService.findById(productId)
-                if (checkProduct != null) {
-                    productService.deleteById(productId)
-                    return ResponseEntity(ResponseMessage(true, "Product deleted successfully"), HttpStatus.OK)
-                }
-                return ResponseEntity(ResponseMessage(false, "Product not found"), HttpStatus.BAD_REQUEST)
-            }
-            return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
-        }
-        return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.NOT_FOUND)
-    }
 }

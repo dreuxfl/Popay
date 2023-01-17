@@ -6,8 +6,8 @@
     <string name="menu_register">Register</string>
     <string name="menu_login">Login</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_credit">Credit</string>
+    <string name="menu_home">Cart</string>
+    <string name="menu_credit">History</string>
     <!-- Strings related to login -->
     <string name="popay_logo_description">poPay Logo</string>
 
@@ -18,7 +18,11 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="action_show_details">Details</string>
+
     <string name="action_register">Register</string>
+    <string name="action_edit_profile">Edit profile</string>
+
     <string name="welcome">"Welcome!"</string>
 
     <!-- Errors -->
@@ -37,12 +41,12 @@
     <string name="login_failed">"Login failed"</string>
     <string name="register_failed">"Register failed"</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="scan_btn_text">Scan QR code</string>
-    <string name="nfc_btn_text">Scan nfc</string>
+    <string name="scan_btn_text">Add product</string>
+    <string name="nfc_btn_text">Validate cart</string>
     <string name="prompt_confirm_password">Confirm password</string>
-    <string name="ajouter_au_panier">Ajouter au panier</string>
-    <string name="produit_scann">Produit scanné</string>
+    <string name="add_to_cart_btn_text">Add to cart</string>
+    <string name="scanned_product">Scanned product</string>
     <string name="profile">Profile</string>
+    <string name="quantity_text">Quantity</string>
 </resources>

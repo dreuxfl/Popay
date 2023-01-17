@@ -19,13 +19,12 @@ class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-
-    private val baseUrl = "http://10.136.76.77:8080/api"
+    private var baseUrl : String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        baseUrl = context?.getString(R.string.baseUrl)
 
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
@@ -75,8 +74,8 @@ class RegisterFragment : Fragment() {
                 val params = HashMap<String, String>()
                 params["email"] = binding.registerEmail.text.toString()
                 params["password"] = binding.registerPassword.text.toString()
-                params["first_name"] = binding.registerFullName.text.toString().split(" ")[0]
-                params["last_name"] = binding.registerFullName.text.toString().split(" ")[1]
+                params["firstName"] = binding.registerFullName.text.toString().split(" ")[0]
+                params["lastName"] = binding.registerFullName.text.toString().split(" ")[1]
                 val jsonObject = JSONObject(params as Map<*, *>)
                 val stringRequest = JsonObjectRequest(
                     Request.Method.POST,
@@ -109,7 +108,7 @@ class RegisterFragment : Fragment() {
                                     }
                                 },
                                 {
-                                    println("ERRR ${it.toString()}")
+                                    println("LOGIN ERRR ${it.message} ${it.cause} ${it.networkResponse.toString()} ")
                                 }
                             )
                             queue.add(stringRequest)
@@ -118,7 +117,7 @@ class RegisterFragment : Fragment() {
                         }
                     },
                     {
-                        println("ERRR ${it.toString()}")
+                        println("REGISTER ERRR $it ${it.networkResponse} ${jsonObject.toString()}")
 
                     }
                 )

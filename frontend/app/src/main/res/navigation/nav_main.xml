@@ -5,6 +5,11 @@
     android:id="@+id/nav_main.xml"
     app:startDestination="@id/homeFragment">
 
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.popay.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/homeFragment"

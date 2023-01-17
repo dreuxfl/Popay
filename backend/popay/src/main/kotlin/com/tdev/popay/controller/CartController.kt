@@ -76,12 +76,6 @@ class CartController(
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
                 val carts = cartService.findAllPayedCartsByUserId(userId)
-                for (cart in carts) {
-                    val cartProducts = cartProductService.findAllByCartId(cart.id)
-                    for (cartProduct in cartProducts) {
-                        cart.totalAmount = cart.totalAmount.plus((cartProduct.product?.price ?: 0.0) * cartProduct.quantity)
-                    }
-                }
                 return ResponseEntity(carts, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
@@ -98,13 +92,7 @@ class CartController(
         if (userId != null) {
             val checkUser = userService.findById(userId)
             if (checkUser != null) {
-                val cart = cartService.findOnePayedCartsByUserId(id, userId)
-                if (cart != null) {
-                    val cartProducts = cartProductService.findAllByCartId(cart.id)
-                    for (cartProduct in cartProducts) {
-                        cart.totalAmount = cart.totalAmount.plus((cartProduct.product?.price ?: 0.0) * cartProduct.quantity)
-                    }
-                }
+                val cart = cartService.findOnePayedCartsByUserId(userId, id)
                 return ResponseEntity(cart, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "User not found"), HttpStatus.BAD_REQUEST)
