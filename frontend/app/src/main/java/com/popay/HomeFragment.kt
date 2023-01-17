@@ -87,7 +87,15 @@ class HomeFragment : Fragment(), CartAdapter.UpdateTotalQuantityListener {
             { response ->
                 try{
                     cartList = arrayListOf()
-                    binding!!.cartItemTotalQuantityValue.text = String.format("%.2f", response.getJSONObject(0).getJSONObject("cart").getDouble("totalAmount")) + "€"
+
+                    if(response.length() > 0) {
+                        binding!!.cartItemTotalQuantityValue.text = String.format(
+                            "%.2f",
+                            response.getJSONObject(0).getJSONObject("cart").getDouble("totalAmount")
+                        ) + "€"
+                    } else {
+                        binding!!.cartItemTotalQuantityValue.text = "0.00€"
+                    }
                     for(i in 0 until response.length()){
                         val cartItemProduct = response.getJSONObject(i).getJSONObject("product")
                         val cartItemId = cartItemProduct.getInt("id")
@@ -96,13 +104,19 @@ class HomeFragment : Fragment(), CartAdapter.UpdateTotalQuantityListener {
                         val cartItemStock = response.getJSONObject(i).getInt("quantity")
                         cartList.add(Product(cartItemId, cartItemName, cartItemPrice, cartItemStock))
                     }
+                    cartListRecyclerView.layoutManager = LinearLayoutManager(context)
+                    if (cartList.isEmpty()) {
+                        binding!!.PlaceHolder.visibility = View.VISIBLE
+                    } else {
+                        binding!!.PlaceHolder.visibility = View.GONE
+                    }
+
                     val adapter = CartAdapter(cartList)
                     adapter.setUpdateTotalQuantityListener(this)
                     cartListRecyclerView.adapter = adapter
 
-
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    binding!!.cartItemTotalQuantityValue.text = "0.00€"
                     Toast.makeText(context, "Fatal error, call dev", Toast.LENGTH_LONG).show()
                 }
             },
