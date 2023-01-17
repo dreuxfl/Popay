@@ -141,7 +141,7 @@ class ProductPopup: AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        val viewBackground = findViewById<CardView>(R.id.popup_window_background)
+        val viewBackground = findViewById<ConstraintLayout>(R.id.popup_window_background)
         val viewWithBorder = findViewById<CardView>(R.id.popup_window_view_with_border)
         val alpha = 100
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
@@ -153,17 +153,21 @@ class ProductPopup: AppCompatActivity() {
             )
         }
 
+
         viewWithBorder.animate().alpha(0f).setDuration(500).setInterpolator(
             DecelerateInterpolator()
         ).start()
 
         colorAnimation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
+                val intent = Intent(this@ProductPopup, MainActivity::class.java)
+                startActivity(intent)
                 finish()
                 overridePendingTransition(0, 0)
             }
         })
         colorAnimation.start()
+
     }
 
 }
