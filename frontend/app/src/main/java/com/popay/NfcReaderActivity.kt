@@ -57,7 +57,6 @@ class NfcReaderActivity : AppCompatActivity()
         val bundle = intent.extras
         val sharedPreferences: SharedPreferences = getSharedPreferences("Authentication", Context.MODE_PRIVATE)
         token = sharedPreferences.getString("token", null).toString()
-        //amount = bundle?.getDouble("amount")!!
         if (nfcAdapter == null) {
             Toast.makeText(this, "NFC is not available", Toast.LENGTH_LONG).show()
             finish()
@@ -178,4 +177,13 @@ class NfcReaderActivity : AppCompatActivity()
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         enableForegroundDispatched(this, nfcAdapter!!)
     }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this@NfcReaderActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
 }

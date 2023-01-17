@@ -21,6 +21,7 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private var baseUrl : String? = null
+    private var edit_mode = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,56 +71,77 @@ class ProfileFragment : Fragment() {
 
 
         binding.editProfile.setOnClickListener {
-            if(
-                binding.profileEmailLayout.error.isNullOrEmpty() &&
-                binding.profilePasswordLayout.error.isNullOrEmpty() &&
-                binding.profilePassword1Layout.error.isNullOrEmpty() &&
-                binding.profileFullNameLayout.error.isNullOrEmpty()
-
-            ) {
-                val queue = Volley.newRequestQueue(context)
-                val params = HashMap<String, String>()
-                params["email"] = binding.profileEmail.text.toString()
-                params["password"] = binding.profilePassword.text.toString()
-                params["firstName"] = binding.profileFullName.text.toString().split(" ")[0]
-                params["lastName"] = binding.profileFullName.text.toString().split(" ")[1]
-                val jsonObject = JSONObject(params as Map<*, *>)
-                val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", null)
-                val stringRequest = object : JsonObjectRequest(
-                    Method.PUT,
-                    "$baseUrl/user",
-                    jsonObject,
-                    { response ->
-                        if(response.getBoolean("success")){
-                            Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
-
-                        } else {
-                            Toast.makeText(context, response.getString("message"), Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                    {
-                        Toast.makeText(context, "Profile edit error", Toast.LENGTH_SHORT).show()
-                        println("profile ERRR $it ${it.networkResponse} ${jsonObject.toString()}")
-
-                    }
-                ){
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val params1: MutableMap<String, String> = HashMap()
-                        params1["Authorization"] = "Bearer $token"
-                        return params
-                    }
-                }
-                queue.add(stringRequest)
-
-
-            } else {
-                Toast.makeText(context, "All fields must be filled in", Toast.LENGTH_LONG).show()
+            if(edit_mode){
+                editProfile()
+                binding.editProfile.text = "Edit Profile"
+                binding.profileEmail.isEnabled = false
+                binding.profilePasswordLayout.visibility = View.GONE
+                binding.profilePassword1Layout.visibility = View.GONE
+                binding.profileFullName.isEnabled = false
+                edit_mode = true
+            }else{
+                binding.editProfile.text = "Save"
+                binding.profileEmail.isEnabled = true
+                binding.profilePasswordLayout.visibility = View.VISIBLE
+                binding.profilePassword1Layout.visibility = View.VISIBLE
+                binding.profileFullName.isEnabled = true
+                edit_mode = true
             }
         }
 
 
+
+
         return binding.root
+    }
+
+    fun editProfile(){
+        if(
+            binding.profileEmailLayout.error.isNullOrEmpty() &&
+            binding.profilePasswordLayout.error.isNullOrEmpty() &&
+            binding.profilePassword1Layout.error.isNullOrEmpty() &&
+            binding.profileFullNameLayout.error.isNullOrEmpty()
+
+        ) {
+            val queue = Volley.newRequestQueue(context)
+            val params = HashMap<String, String>()
+            params["email"] = binding.profileEmail.text.toString()
+            params["password"] = binding.profilePassword.text.toString()
+            params["firstName"] = binding.profileFullName.text.toString().split(" ")[0]
+            params["lastName"] = binding.profileFullName.text.toString().split(" ")[1]
+            val jsonObject = JSONObject(params as Map<*, *>)
+            val sharedPreferences: SharedPreferences? = context?.getSharedPreferences("Authentication", Context.MODE_PRIVATE)
+            val token = sharedPreferences?.getString("token", null)
+            val stringRequest = object : JsonObjectRequest(
+                Method.PUT,
+                "$baseUrl/user",
+                jsonObject,
+                { response ->
+                    if(response.getBoolean("success")){
+                        Toast.makeText(context, "Profile Edition successful", Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        Toast.makeText(context, response.getString("message"), Toast.LENGTH_SHORT).show()
+                    }
+                },
+                {
+                    Toast.makeText(context, "Profile edit error", Toast.LENGTH_SHORT).show()
+                    println("profile ERRR $it ${it.networkResponse} ${jsonObject.toString()}")
+
+                }
+            ){
+                override fun getHeaders(): MutableMap<String, String> {
+                    val params1: MutableMap<String, String> = HashMap()
+                    params1["Authorization"] = "Bearer $token"
+                    return params1
+                }
+            }
+            queue.add(stringRequest)
+
+
+        } else {
+            Toast.makeText(context, "All fields must be filled in", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/cart_item_price"
-        android:layout_width="40pt"
+        android:layout_width="48pt"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
         android:paddingHorizontal="@dimen/fragment_horizontal_margin"
