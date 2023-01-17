@@ -1,7 +1,6 @@
 package com.popay
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -128,7 +127,6 @@ class QRCodeScannerActivity : AppCompatActivity() {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() == 1) {
                     scannedValue = barcodes.valueAt(0).rawValue
-
 
                     runOnUiThread {
                         cameraSource.stop()

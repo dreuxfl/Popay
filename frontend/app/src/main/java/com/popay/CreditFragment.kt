@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.popay.databinding.FragmentCreditBinding
 import com.popay.databinding.FragmentHomeBinding
 import com.popay.entities.Cart
 import java.time.LocalDateTime
@@ -20,7 +21,7 @@ import kotlin.collections.HashMap
 
 class CreditFragment : Fragment() {
 
-    private var binding: FragmentHomeBinding? = null
+    private var binding: FragmentCreditBinding? = null
 
     private lateinit var cartsListRecyclerView: RecyclerView
     private var baseUrl : String? = null
@@ -31,9 +32,9 @@ class CreditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         baseUrl = context?.getString(R.string.baseUrl)
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentCreditBinding.inflate(inflater, container, false)
 
-        cartsListRecyclerView = binding!!.cartList
+        cartsListRecyclerView = binding!!.cartHistoryList
         cartsListRecyclerView.layoutManager = LinearLayoutManager(context)
         return binding!!.root
     }

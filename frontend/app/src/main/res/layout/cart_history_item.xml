@@ -9,39 +9,22 @@
     android:paddingBottom="@dimen/fragment_vertical_margin_small">
 
     <TextView
-        android:id="@+id/cart_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fragment_horizontal_margin"
-        android:layout_marginEnd="@dimen/fragment_horizontal_margin_small"
-        android:paddingHorizontal="@dimen/fragment_horizontal_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cart_payment_date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/cart_payment_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
-        android:layout_marginEnd="@dimen/fragment_horizontal_margin_small"
         android:paddingHorizontal="@dimen/fragment_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cart_payment_time"
-        app:layout_constraintStart_toEndOf="@+id/cart_id"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/cart_payment_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
-        android:layout_marginEnd="@dimen/fragment_horizontal_margin_small"
         android:paddingHorizontal="@dimen/fragment_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cart_price"
-        app:layout_constraintStart_toEndOf="@+id/cart_id"
+        app:layout_constraintStart_toEndOf="@+id/cart_payment_date"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -49,14 +32,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="@dimen/fragment_horizontal_margin_small"
-        android:layout_marginEnd="@dimen/fragment_horizontal_margin_small"
+        android:layout_marginStart="175dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cart_payment_time"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.502" />
+        app:layout_constraintVertical_bias="0.509" />
 
+<!--    <TextView
+        android:id="@+id/details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4pt"
+        android:text="Details >>"
+        android:textColor="@color/gold"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/details"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/cyber_yellow"
+        android:enabled="true"
+        android:text="@string/action_show_details"
+        android:textAllCaps="true"
+        android:textSize="11dp"
+        app:cornerRadius="@dimen/fragment_corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
