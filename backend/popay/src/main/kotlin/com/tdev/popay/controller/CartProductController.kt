@@ -96,9 +96,6 @@ class CartProductController(
             val checkCart = cartService.findOnePayedCartsByUserId(userId, cartId)
             if (checkCart != null) {
                 val checkCartProducts = cartProductService.findAllByCartId(checkCart.id)
-                for (cartProducts in checkCartProducts) {
-                    cartProducts.cart?.totalAmount = cartProducts.cart?.totalAmount?.plus((cartProducts.product?.price ?: 0.0) * cartProducts.quantity)!!
-                }
                 return ResponseEntity(checkCartProducts, HttpStatus.OK)
             }
             return ResponseEntity(ResponseMessage(false, "Cart not found"), HttpStatus.BAD_REQUEST)
