@@ -68,7 +68,6 @@ class CreditFragment : Fragment() {
                     cartsListRecyclerView.adapter = CartsHistoryAdapter(carts)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(context, "Fatal error, call dev", Toast.LENGTH_LONG).show()
                 }
             },
             {
