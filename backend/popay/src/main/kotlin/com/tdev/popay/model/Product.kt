@@ -13,8 +13,10 @@ data class Product(
     @get: DecimalMin(value = "0.01", inclusive = false, message = "Price must be greater than 0.01")
     val price: Double = 0.0,
     @get: NotBlank(message = "Caption is mandatory")
+    @get: Size(max = 50, message = "Caption must be 50 characters maximum")
     val caption: String = "",
     @get: NotBlank(message = "Description is mandatory")
+    @get: Size(max = 255, message = "Description must be 255 characters maximum")
     val description: String = "",
     @get: Min(value = 1, message = "Quantity must be greater than 0")
     val stock: Int = 0,
