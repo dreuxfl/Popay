@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="3dp"
+        app:cardBackgroundColor="@color/onyx"
+        app:cardCornerRadius="@dimen/fragment_corner_radius"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
         app:cardPreventCornerOverlap="false"
@@ -29,11 +29,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/popup_window_background_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:background="@color/onyx"
-            android:minHeight="170dp">
+            android:layout_width="150pt"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
 
             <TextView
                 android:id="@+id/popup_window_title"
@@ -49,7 +47,6 @@
                 app:autoSizeMaxTextSize="24dp"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toTopOf="@+id/popup_window_productname"
-                app:layout_constraintDimensionRatio=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -123,11 +120,13 @@
                 android:id="@+id/text_quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/quantity_text"
                 android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toTopOf="@+id/edit_text_quantite_value"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/popup_window_productDesc" />
 
             <EditText
                 android:id="@+id/edit_text_quantite_value"
